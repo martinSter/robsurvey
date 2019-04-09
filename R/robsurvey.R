@@ -1,6 +1,3 @@
-
-
-
 #' Weighted lower sample median
 #'
 #' \code{weighted.median} computes the weighted lower sample median
@@ -36,6 +33,8 @@ weighted.median <- function(x, w, na.rm = FALSE){
       probs = as.double(0.5), q = as.double(numeric(1)), n = as.integer(n))
    return(tmp$q)
 }
+
+
 #' Weighted lower sample quantiles
 #'
 #' \code{weighted.quantile} computes the weighted lower sample quantile
@@ -413,7 +412,7 @@ svymean.huber <- function(x, design, k, type = "rht", ...){
    names(tmp$beta) <- yname
    # compute variance (using influence function values)
    design$variables$zz <- tmp$infl
-   v <- as.numeric(attr(svymean(~zz, design), "var"))
+   v <- as.numeric(attr(survey::svymean(~zz, design), "var"))
    design$variables$zz <- NULL
    robweights <- tmp$robwgt
    outliers <- 1 * (abs(robweights) < 1)
@@ -589,7 +588,7 @@ svymean.trimmed <- function(x, design, LB = 0.05, UB = 1 - LB, ...){
    infl <- (y + mat) * (1 / (UB - LB)) - est
    # compute variance (using influence function values)
    design$variables$zz <- infl
-   v <- as.numeric(attr(svymean(~zz, design), "var"))
+   v <- as.numeric(attr(survey::svymean(~zz, design), "var"))
    design$variables$zz <- NULL
    # return value
    res <- list(characteristic = "mean",
@@ -766,7 +765,7 @@ svymean.winsorized <- function(x, design, LB = 0.05, UB = 1 - LB, ...){
    infl <- (y + mat) * (1 / (UB - LB)) - est
    # compute variance (using influence function values)
    design$variables$zz <- infl
-   v <- as.numeric(attr(svymean(~zz, design), "var"))
+   v <- as.numeric(attr(survey::svymean(~zz, design), "var"))
    design$variables$zz <- NULL
    # return value
    res <- list(characteristic = "mean",
