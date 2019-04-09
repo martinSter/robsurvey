@@ -1,0 +1,23 @@
+Package: robsurvey
+Type: Package
+Title: Robust Survey Estimation 
+Version: 0.0.0.9000
+Authors@R: c(
+    person("Beat", "Hulliger", email = "beat.hulliger@fhnw.ch", role = "aut"),
+    person("Tobias", "Schoch", email = "tobias.schoch@gmail.com", role = c("aut", "cre")))
+Description: Robust Horvitz-Thompson estimation
+License: GPL-2 
+Encoding: UTF-8
+LazyData: true
+Depends: R (>= 3.5.1)
+Imports: 
+    survey (>= 3.35-1),
+    stats,
+    graphics,
+    utils
+RoxygenNote: 6.1.1
+Suggests:
+    knitr,
+    rmarkdown,
+    testthat
+VignetteBuilder: knitr
