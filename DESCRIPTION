@@ -6,7 +6,7 @@ Authors@R: c(
     person("Beat", "Hulliger", email = "beat.hulliger@fhnw.ch", role = "aut"),
     person("Tobias", "Schoch", email = "tobias.schoch@gmail.com", role = c("aut", "cre")))
 Description: Robust Horvitz-Thompson estimation
-License: GPL-2 
+License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Depends: R (>= 3.5.1)
