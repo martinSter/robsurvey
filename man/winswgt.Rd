@@ -18,7 +18,7 @@ svymean.winsorized(x, design, LB = 0.05, UB = 1 - LB, ...)
 svytotal.winsorized(x, design, LB = 0.05, UB = 1 - LB, ...)
 }
 \arguments{
-\item{x}{numeric vector (\code{weighted.mean} or \code{weighted.total}); a 
+\item{x}{numeric vector (\code{weighted.mean} or \code{weighted.total}); a
 formula object or variable name (\code{svymean} or \code{svytotal})}
 
 \item{w}{numeric vector of weights}
@@ -27,10 +27,10 @@ formula object or variable name (\code{svymean} or \code{svytotal})}
 
 \item{UB}{upper bound of trimming, such that \eqn{0 \leq LB < UB \leq 1}}
 
-\item{na.rm}{a logical value indicating whether \code{NA} values should be 
+\item{na.rm}{a logical value indicating whether \code{NA} values should be
 stripped before the computation proceeds.}
 
-\item{design}{a \code{survey.design} object (see \code{\link[survey]{svydesign}} 
+\item{design}{a \code{survey.design} object (see \code{\link[survey]{svydesign}}
 in \pkg{survey})}
 
 \item{...}{additional arguments (not used)}
@@ -39,44 +39,44 @@ in \pkg{survey})}
 Estimate (scalar) or object of class \code{svystat.rob}
 }
 \description{
-Weighted winsorized estimators of the mean and total are available in two forms: 
+Weighted winsorized estimators of the mean and total are available in two forms:
 \itemize{
-   \item \strong{bare-bone} functions: \code{weighted.mean.winsorized} and 
+   \item \strong{bare-bone} functions: \code{weighted.mean.winsorized} and
  \code{weighted.total.winsorized},
-   \item estimation \strong{methods}: \code{svymean.winsorized} and 
- \code{svytotal.winsorized} (incl. variance estimation 
+   \item estimation \strong{methods}: \code{svymean.winsorized} and
+ \code{svytotal.winsorized} (incl. variance estimation
  based on the functionality of the \pkg{survey} package).
 }
 }
 \details{
 \describe{
-   \item{\emph{Overview}}{ 
-   Robust winsorized Horvitz--Thompson total or Hajek mean 
+   \item{\emph{Overview}}{
+   Robust winsorized Horvitz--Thompson total or Hajek mean
  \itemize{
- \item bare-bone functions: return the estimate (no variance estimation)  
+ \item bare-bone functions: return the estimate (no variance estimation)
  \item estimation methods on the basis of \pkg{survey} (incl. variance estimation)
  }
    }
    \item{\emph{Variance}}{
    Variance estimates of the mean or total estimator are computed as first-order
-   linearization using the design-based-estimation capabilities available 
-   in package \pkg{survey}. 
+   linearization using the design-based-estimation capabilities available
+   in package \pkg{survey}.
    }
    \item{\emph{Domain estimation}}{
    Estimates for domains can be obtained using the \code{\link[survey]{svyby}}
-   wrapper in the \pkg{survey} package (see examples). 
+   wrapper in the \pkg{survey} package (see examples).
    }
 }
 }
 \section{Utility functions}{
- 
+
 For the methods \code{svymean.winsorized} and \code{svytotal.winsorized}, the following
 utility functions can be used
-\itemize{ 
-   \item \code{summary} gives a summary of the estimation properties 
-   \item \code{\link{robweights}} retrieves the robustness weights   
-   \item \code{coef}, \code{vcov}, \code{residuals}, and \code{fitted} 
- retrieve, respectively, the estimate, variance, residuals and fitted 
+\itemize{
+   \item \code{summary} gives a summary of the estimation properties
+   \item \code{\link{robweights}} retrieves the robustness weights
+   \item \code{coef}, \code{vcov}, \code{residuals}, and \code{fitted}
+ retrieve, respectively, the estimate, variance, residuals and fitted
  values
 }
 }
@@ -86,7 +86,7 @@ data(api)
 dstrat <- svydesign(id=~1,strata=~stype, weights=~pw, data=apistrat, fpc=~fpc)
 svymean.winsorized(~api00, dstrat, k = 2)
 # Domain estimates
-svyby(~api00, by = ~stype, design = dstrat, svymean.winsorized, LB = 0.1) 
+svyby(~api00, by = ~stype, design = dstrat, svymean.winsorized, LB = 0.1)
 }
 \seealso{
 \code{\link{svymean.huber}}, \code{\link{svytotal.huber}},

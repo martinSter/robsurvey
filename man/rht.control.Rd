@@ -21,7 +21,7 @@ List
 This function is called internally.
 }
 \details{
-Tuning parameters for \code{\link{weighted.mean.huber}}, 
-\code{\link{weighted.total.huber}}, \code{\link{svymean.huber}}, 
+Tuning parameters for \code{\link{weighted.mean.huber}},
+\code{\link{weighted.total.huber}}, \code{\link{svymean.huber}},
 \code{\link{svytotal.huber}}.
 }

@@ -11,7 +11,7 @@ weighted.median(x, w, na.rm = FALSE)
 
 \item{w}{a numeric vector of weights}
 
-\item{na.rm}{a logical value indicating whether \code{NA} values should be 
+\item{na.rm}{a logical value indicating whether \code{NA} values should be
 stripped before the computation proceeds.}
 }
 \value{
@@ -24,7 +24,7 @@ weighted sample median
 See \code{\link{weighted.quantile}} for further details.
 }
 \examples{
-x <- c(0.1, 0.35, 0.05, 0.1, 0.15, 0.05, 0.2) 
+x <- c(0.1, 0.35, 0.05, 0.1, 0.15, 0.05, 0.2)
 weighted.median(x, x)
 }
 \seealso{

@@ -13,7 +13,7 @@ weighted.quantile(x, w, probs, na.rm = FALSE)
 
 \item{probs}{a numeric vector of probabilities with values in [0,1]}
 
-\item{na.rm}{a logical value indicating whether \code{NA} values should be 
+\item{na.rm}{a logical value indicating whether \code{NA} values should be
 stripped before the computation proceeds.}
 }
 \value{
@@ -23,16 +23,16 @@ Weighted sample quantiles
 \code{weighted.quantile} computes the weighted lower sample quantile
 }
 \details{
-Weighted lower quantiles are computed using an algorithm with \eqn{O(n log n)} 
-in worst-case time. There exist superior algorithms; see Cormen et al. 
+Weighted lower quantiles are computed using an algorithm with \eqn{O(n*log(n))}
+in worst-case time. There exist superior algorithms; see Cormen et al.
 (2009, Problem 9.2).
 }
 \examples{
-x <- c(0.1, 0.35, 0.05, 0.1, 0.15, 0.05, 0.2) 
+x <- c(0.1, 0.35, 0.05, 0.1, 0.15, 0.05, 0.2)
 weighted.quantile(x, x, probs = c(0.25, 0.5, 0.75))
 }
 \references{
-Cormen,T.H., Leiserson, C.E., Rivest, R.L., and Stein, C. (2009): 
+Cormen,T.H., Leiserson, C.E., Rivest, R.L., and Stein, C. (2009):
    Introduction to Algorithms, 3rd ed., Cambridge: MIT Press.
 }
 \seealso{

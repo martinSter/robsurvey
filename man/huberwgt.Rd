@@ -19,103 +19,103 @@ svymean.huber(x, design, k, type = "rht", ...)
 svytotal.huber(x, design, k, ...)
 }
 \arguments{
-\item{x}{a numeric vector (\code{weighted.[total/mean].huber} or 
-\code{weighted.[total/mean].huber}); a formula object or variable name 
+\item{x}{a numeric vector (\code{weighted.[total/mean].huber} or
+\code{weighted.[total/mean].huber}); a formula object or variable name
 (\code{svymean.huber} or \code{svytotal.huber})}
 
 \item{k}{a robustness tuning constant, \eqn{k} in \eqn{[0, \infty)}}
 
 \item{type}{type of estimator: \code{"rht"} (default) or \code{"rwm"}}
 
-\item{info}{logical (default: \code{FALSE}); if \code{TRUE} further 
+\item{info}{logical (default: \code{FALSE}); if \code{TRUE} further
 estimation details are returned}
 
-\item{na.rm}{a logical value indicating whether \code{NA} values should be 
+\item{na.rm}{a logical value indicating whether \code{NA} values should be
 stripped before the computation proceeds.}
 
-\item{...}{additional arguments passed to the control object (see 
+\item{...}{additional arguments passed to the control object (see
 \code{\link{rht.control}})}
 
-\item{design}{a \code{survey.design} object (see \code{\link[survey]{svydesign}} 
+\item{design}{a \code{survey.design} object (see \code{\link[survey]{svydesign}}
 in \pkg{survey})}
 
 \item{a}{w numeric vector of weights}
 }
 \value{
 \itemize{
-   \item An estimate (scalar) for \code{weighted.[total/mean].huber} 
+   \item An estimate (scalar) for \code{weighted.[total/mean].huber}
 (unless \code{info=TRUE})
-   \item An object of class \code{svystat.rob} for functions of the type 
-   \code{svy[total/mean].huber}, i.e. a list including the following components: 
-   \code{characteristic}, \code{estimator}, \code{estimate}, \code{variance}, 
-   \code{robust}, \code{optim}, \code{residuals}, \code{model}, \code{design}, 
-   and \code{call}. 
+   \item An object of class \code{svystat.rob} for functions of the type
+   \code{svy[total/mean].huber}, i.e. a list including the following components:
+   \code{characteristic}, \code{estimator}, \code{estimate}, \code{variance},
+   \code{robust}, \code{optim}, \code{residuals}, \code{model}, \code{design},
+   and \code{call}.
 }
 }
 \description{
-Weighted Huber M-estimators of the mean and total are available in two forms: 
+Weighted Huber M-estimators of the mean and total are available in two forms:
 \itemize{
-   \item \strong{bare-bone} functions: \code{weighted.mean.huber} and 
+   \item \strong{bare-bone} functions: \code{weighted.mean.huber} and
  \code{weighted.total.huber},
-   \item estimation \strong{methods}: \code{svymean.huber} and 
- \code{svytotal.huber} (incl. variance estimation 
+   \item estimation \strong{methods}: \code{svymean.huber} and
+ \code{svytotal.huber} (incl. variance estimation
  based on the functionality of the \pkg{survey} package).
 }
 }
 \details{
 \describe{
-   \item{\emph{Overview}}{ 
+   \item{\emph{Overview}}{
    Robust M-estimator of the Horvitz--Thompson total or the Hajek mean
  \itemize{
- \item bare-bone functions: return the estimate (no variance estimation)  
+ \item bare-bone functions: return the estimate (no variance estimation)
  \item estimation methods on the basis of \pkg{survey} (incl. variance estimation)
  }
    }
    \item{\emph{Type}}{
-   Two \code{type}s of estimation methods are available: 
+   Two \code{type}s of estimation methods are available:
  \describe{
-    \item{\code{rht}}{(robust) Horvitz-Thompson M-estimator of the 
+    \item{\code{rht}}{(robust) Horvitz-Thompson M-estimator of the
     total/ mean
-    } 
+    }
     \item{\code{rwm}}{(robust) robust weighted mean estimator
     a Hajek-type estimator of the mean.
     }
  }
    If the study variable \code{x} is positively correlated with the inclusion
-   probabilities, type \code{"rht"} tends to be superior. 
+   probabilities, type \code{"rht"} tends to be superior.
    }
    \item{\emph{Scale}}{
-   M-estimators of location are not scale invariant. The unkown scale is 
-   estimated simultaneously with the estimate of location (mean or toal) as 
-   the weighted median absolute deviation from the weighted median (MAD, see 
+   M-estimators of location are not scale invariant. The unkown scale is
+   estimated simultaneously with the estimate of location (mean or toal) as
+   the weighted median absolute deviation from the weighted median (MAD, see
    \code{\link{weighted.mad}}).
-   
-   }
+
+}
    \item{\emph{Variance}}{
    Variance estimates of the mean or total estimator are computed as first-order
-   linearization using the design-based-estimation capabilities available 
-   in package \pkg{survey}. 
+   linearization using the design-based-estimation capabilities available
+   in package \pkg{survey}.
    }
    \item{\emph{Tuning}}{
-   Additional arguments can be passed (via \dots) to specify the control 
-   parameters (e.g. number of iterations, psi-function, etc.); see 
+   Additional arguments can be passed (via \dots) to specify the control
+   parameters (e.g. number of iterations, psi-function, etc.); see
    \code{\link{rht.control}} for details.
    }
    \item{\emph{Domain estimation}}{
    Estimates for domains can be obtained using the \code{\link[survey]{svyby}}
-   wrapper in the \pkg{survey} package (see examples). 
+   wrapper in the \pkg{survey} package (see examples).
    }
 }
 }
 \section{Utility functions}{
- 
+
 For the methods \code{svymean.huber} and \code{svytotal.huber}, the following
 utility functions can be used
-\itemize{ 
-   \item \code{summary} gives a summary of the estimation properties 
-   \item \code{\link{robweights}} retrieves the robustness weights   
-   \item \code{coef}, \code{vcov}, \code{residuals}, and \code{fitted} 
- retrieve, respectively, the estimate, variance, residuals and fitted 
+\itemize{
+   \item \code{summary} gives a summary of the estimation properties
+   \item \code{\link{robweights}} retrieves the robustness weights
+   \item \code{coef}, \code{vcov}, \code{residuals}, and \code{fitted}
+ retrieve, respectively, the estimate, variance, residuals and fitted
  values
 }
 }
@@ -125,10 +125,10 @@ data(api)
 dstrat <- svydesign(id=~1,strata=~stype, weights=~pw, data=apistrat, fpc=~fpc)
 svymean.huber(~api00, dstrat, k = 2)
 # Domain estimates
-svyby(~api00, by = ~stype, design = dstrat, svymean.huber, k = 1.34) 
+svyby(~api00, by = ~stype, design = dstrat, svymean.huber, k = 1.34)
 }
 \references{
-Hulliger, B. (1995). Outlier Robust Horvitz-Thompson Estimators, 
+Hulliger, B. (1995). Outlier Robust Horvitz-Thompson Estimators,
    \emph{Survey Methodology} 21(1): 79-87.
 }
 \seealso{

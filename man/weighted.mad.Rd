@@ -11,7 +11,7 @@ weighted.mad(x, w, na.rm = FALSE, constant = 1.4826)
 
 \item{w}{a numeric vector of weights}
 
-\item{na.rm}{a logical value indicating whether \code{NA} values should be 
+\item{na.rm}{a logical value indicating whether \code{NA} values should be
 stripped before the computation proceeds.}
 
 \item{constant}{(scale factor, default: 1.4826)}
@@ -20,17 +20,17 @@ stripped before the computation proceeds.}
 Weighted median absolute deviation from the (weighted) median
 }
 \description{
-\code{weighted.mad} computes weighted median absolute deviation from the 
+\code{weighted.mad} computes weighted median absolute deviation from the
 weighted median
 }
 \details{
 The weighted MAD is computed as the (normalized) weighted median of the
-absolute deviation from the weighted median; the median is compute as the  
+absolute deviation from the weighted median; the median is compute as the
 weighted lower sample median (see \code{\link{weighted.median}}); the MAD
 is normalized to be an unbiased estimate of scale at the Gaussian core model.
 }
 \examples{
-x <- c(0.1, 0.35, 0.05, 0.1, 0.15, 0.05, 0.2) 
+x <- c(0.1, 0.35, 0.05, 0.1, 0.15, 0.05, 0.2)
 weighted.mad(x, x)
 }
 \seealso{

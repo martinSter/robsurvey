@@ -6,9 +6,6 @@
 \usage{
 robweights(object)
 }
-\arguments{
-\item{object}{}
-}
 \value{
 Vector of robustness weights
 }
