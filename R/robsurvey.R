@@ -14,6 +14,8 @@
 #' weighted.median(x, x)
 #' @seealso \code{\link{weighted.quantile}}
 #' @export
+#' @importFrom stats na.omit
+#' @useDynLib robsurvey wquantile
 weighted.median <- function(x, w, na.rm = FALSE){
    if (is.factor(x) || is.factor(w) || is.data.frame(x)){
       stop("Arguments 'x' and 'w' must be numeric vectors\n")
@@ -30,16 +32,17 @@ weighted.median <- function(x, w, na.rm = FALSE){
       return(NA)
    }
    tmp <- .C("wquantile", x = as.double(dat[, 1]), w = as.double(dat[, 2]),
-      probs = as.double(0.5), q = as.double(numeric(1)), n = as.integer(n))
+             probs = as.double(0.5), q = as.double(numeric(1)), n = as.integer(n))
    return(tmp$q)
 }
+
 
 
 #' Weighted lower sample quantiles
 #'
 #' \code{weighted.quantile} computes the weighted lower sample quantile
 #'
-#' Weighted lower quantiles are computed using an algorithm with \eqn{O(n log n)}
+#' Weighted lower quantiles are computed using an algorithm with \eqn{O(n*log(n))}
 #' in worst-case time. There exist superior algorithms; see Cormen et al.
 #' (2009, Problem 9.2).
 #'
@@ -56,6 +59,8 @@ weighted.median <- function(x, w, na.rm = FALSE){
 #'    Introduction to Algorithms, 3rd ed., Cambridge: MIT Press.
 #' @seealso \code{\link{weighted.median}}
 #' @export
+#' @importFrom stats na.omit
+#' @useDynLib robsurvey wquantile
 weighted.quantile <- function(x, w, probs, na.rm = FALSE){
    if (is.factor(x) || is.factor(w) || is.data.frame(x)){
       stop("Arguments 'x' and 'w' must be numeric vectors\n")
@@ -77,12 +82,14 @@ weighted.quantile <- function(x, w, probs, na.rm = FALSE){
    res <- NULL
    for (i in 1:length(probs)){
       tmp <- .C("wquantile", x = as.double(dat[, 1]), w = as.double(dat[, 2]),
-	 probs = as.double(probs[i]), q = as.double(numeric(1)),
-	 n = as.integer(n))
+                probs = as.double(probs[i]), q = as.double(numeric(1)),
+                n = as.integer(n))
       res <- c(res, tmp$q)
    }
    return(res)
 }
+
+
 
 #' Weighted median absolute deviation from the median (MAD)
 #'
@@ -90,7 +97,7 @@ weighted.quantile <- function(x, w, probs, na.rm = FALSE){
 #' weighted median
 #'
 #' The weighted MAD is computed as the (normalized) weighted median of the
-#' absolute deviation from the weighted median; the median is compute as the
+#' absolute deviation from the weighted median; the median is computed as the
 #' weighted lower sample median (see \code{\link{weighted.median}}); the MAD
 #' is normalized to be an unbiased estimate of scale at the Gaussian core model.
 #'
@@ -105,6 +112,8 @@ weighted.quantile <- function(x, w, probs, na.rm = FALSE){
 #' weighted.mad(x, x)
 #' @seealso \code{\link{weighted.median}}
 #' @export
+#' @importFrom stats na.omit
+#' @useDynLib robsurvey wmad
 weighted.mad <- function(x, w, na.rm = FALSE, constant = 1.4826){
    if (is.factor(x) || is.factor(w) || is.data.frame(x)){
       stop("Arguments 'x' and 'w' must be numeric vectors\n")
@@ -121,9 +130,11 @@ weighted.mad <- function(x, w, na.rm = FALSE, constant = 1.4826){
       return(NA)
    }
    tmp <- .C("wmad", x = as.double(dat[, 1]), w = as.double(dat[, 2]),
-      mad = as.double(numeric(1)), n = as.integer(n))
+             mad = as.double(numeric(1)), n = as.integer(n))
    return(tmp$mad * constant)
 }
+
+
 
 #' Control function for M-estimation (tuning parameters etc.)
 #'
@@ -166,6 +177,7 @@ rht.control <- function(acc = 1e-5, maxit = 100, psi = "Huber", ...){
 #' @return Estimate (scalar)
 #' @name wgtmeantotal
 #' @export wgtmeantotal
+#' @importFrom stats na.omit
 NULL
 
 #' @rdname wgtmeantotal
@@ -303,6 +315,7 @@ weighted.mean <- function(x, w, na.rm = FALSE){
 #'    \emph{Survey Methodology} 21(1): 79-87.
 #' @name huberwgt
 #' @export huberwgt
+#' @importFrom stats na.omit
 #' @examples
 #' data(api)
 #' dstrat <- svydesign(id=~1,strata=~stype, weights=~pw, data=apistrat, fpc=~fpc)
@@ -316,6 +329,7 @@ weighted.mean <- function(x, w, na.rm = FALSE){
 NULL
 
 #' @rdname huberwgt
+#' @useDynLib robsurvey rwlslm
 weighted.mean.huber <- function(x, w, k, type = "rht", info = FALSE,
    na.rm = FALSE, ...){
    ctrl <- rht.control(...)
@@ -379,6 +393,7 @@ weighted.total.huber <- function(x, w, k, type = "rht", info = FALSE,
 }
 
 #' @rdname huberwgt
+#' @useDynLib robsurvey rwlslm
 svymean.huber <- function(x, design, k, type = "rht", ...){
    ctrl <- rht.control(...)
    if (class(x) == "formula"){
@@ -499,6 +514,7 @@ svytotal.huber <- function(x, design, k, ...){
 #' @return Estimate (scalar) or object of class \code{svystat.rob}
 #' @name trimwgt
 #' @export trimwgt
+#' @importFrom stats na.omit
 #' @examples
 #' data(api)
 #' dstrat <- svydesign(id=~1,strata=~stype, weights=~pw, data=apistrat, fpc=~fpc)
@@ -512,6 +528,7 @@ svytotal.huber <- function(x, design, k, ...){
 NULL
 
 #' @rdname trimwgt
+#' @useDynLib robsurvey wmeantrimmed
 weighted.mean.trimmed <- function(x, w, LB = 0.05, UB = 1 - LB, na.rm = FALSE){
    n <- length(x)
    if (length(w) != n) stop("Vectors 'x' and 'w' are not of the same dimension\n")
@@ -687,6 +704,7 @@ svytotal.trimmed <- function(x, design, LB = 0.05, UB = 1 - LB, ...){
 NULL
 
 #' @rdname winswgt
+#' @useDynLib robsurvey wmeanwinsorized
 weighted.mean.winsorized <- function(x, w, LB = 0.05, UB = 1 - LB,
    na.rm = FALSE){
    n <- length(x)
