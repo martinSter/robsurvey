@@ -336,7 +336,7 @@ weighted.mean <- function(x, w, na.rm = FALSE){
 #' \code{\link{weighted.mean.winsorized}}, \code{\link{weighted.total.winsorized}}
 #'
 #' @rdname huberwgt
-#' @export
+#' @export weighted.mean.huber
 #' @importFrom stats na.omit
 #' @useDynLib robsurvey rwlslm
 weighted.mean.huber <- function(x, w, k, type = "rht", info = FALSE,
@@ -388,7 +388,7 @@ weighted.mean.huber <- function(x, w, k, type = "rht", info = FALSE,
    return(res)
 }
 #' @rdname huberwgt
-#' @export
+#' @export weighted.total.huber
 weighted.total.huber <- function(x, w, k, type = "rht", info = FALSE,
    na.rm = FALSE, ...){
    res <- weighted.mean.huber(x, w, k, type, info, na.rm, ...)
@@ -408,9 +408,8 @@ weighted.total.huber <- function(x, w, k, type = "rht", info = FALSE,
 #' svymean.huber(~api00, dstrat, k = 2)
 #' # Domain estimates
 #' svyby(~api00, by = ~stype, design = dstrat, svymean.huber, k = 1.34)
-#' @export
+#' @export svymean.huber
 #' @importFrom stats model.frame
-#' @importFrom survey weights
 #' @useDynLib robsurvey rwlslm
 svymean.huber <- function(x, design, k, type = "rht", ...){
    ctrl <- rht.control(...)
@@ -430,7 +429,7 @@ svymean.huber <- function(x, design, k, type = "rht", ...){
 	 stop("svymean is not defined for object of class: ", class(x), "\n")
       }
    }
-   w <- as.numeric(weights(design))
+   w <- as.numeric(survey::weights(design))
    x <- switch(type,
       "rht" = rep(1, n),
       "rwm" = mean(w) / w)
@@ -465,12 +464,11 @@ svymean.huber <- function(x, design, k, type = "rht", ...){
    res
 }
 #' @rdname huberwgt
-#' @export
-#' @importFrom survey weights
+#' @export svytotal.huber
 svytotal.huber <- function(x, design, k, ...){
    tmp <- svymean.huber(x, design, k, type = "rht", ...)
    tmp$characteristic <- "total"
-   sumw <- sum(weights(design))
+   sumw <- sum(survey::weights(design))
    tmp$estimate <- tmp$estimate * sumw
    tmp$variance <- tmp$variance * sumw^2
    tmp
