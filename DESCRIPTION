@@ -9,9 +9,10 @@ Description: Robust Horvitz-Thompson estimation
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
-Depends: R (>= 3.5.1)
+Depends: 
+    R (>= 3.5.1),
+    survey (>= 3.35-1)
 Imports: 
-    survey (>= 3.35-1),
     stats,
     graphics,
     utils
