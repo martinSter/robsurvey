@@ -14,14 +14,16 @@ weighted.mean.huber(x, w, k, type = "rht", info = FALSE,
 weighted.total.huber(x, w, k, type = "rht", info = FALSE,
   na.rm = FALSE, ...)
 
-svymean.huber(x, design, k, type = "rht", ...)
+\method{svymean}{huber}(x, design, k, type = "rht", ...)
 
-svytotal.huber(x, design, k, ...)
+\method{svytotal}{huber}(x, design, k, ...)
 }
 \arguments{
 \item{x}{a numeric vector (\code{weighted.[total/mean].huber} or
-\code{weighted.[total/mean].huber}); a formula object or variable name
-(\code{svymean.huber} or \code{svytotal.huber})}
+\code{weighted.[total/mean].huber}); a formula object or variable
+name (\code{svymean.huber} or \code{svytotal.huber})}
+
+\item{w}{a numeric vector of weights}
 
 \item{k}{a robustness tuning constant, \eqn{k} in \eqn{[0, \infty)}}
 
@@ -30,21 +32,19 @@ svytotal.huber(x, design, k, ...)
 \item{info}{logical (default: \code{FALSE}); if \code{TRUE} further
 estimation details are returned}
 
-\item{na.rm}{a logical value indicating whether \code{NA} values should be
-stripped before the computation proceeds.}
+\item{na.rm}{a logical value indicating whether \code{NA} values should
+be stripped before the computation proceeds.}
 
-\item{...}{additional arguments passed to the control object (see
-\code{\link{rht.control}})}
+\item{...}{additional arguments passed to the control object
+(see \code{\link{rht.control}})}
 
 \item{design}{a \code{survey.design} object (see \code{\link[survey]{svydesign}}
 in \pkg{survey})}
-
-\item{a}{w numeric vector of weights}
 }
 \value{
 \itemize{
    \item An estimate (scalar) for \code{weighted.[total/mean].huber}
-(unless \code{info=TRUE})
+   (unless \code{info=TRUE})
    \item An object of class \code{svystat.rob} for functions of the type
    \code{svy[total/mean].huber}, i.e. a list including the following components:
    \code{characteristic}, \code{estimator}, \code{estimate}, \code{variance},
@@ -75,9 +75,9 @@ Weighted Huber M-estimators of the mean and total are available in two forms:
    Two \code{type}s of estimation methods are available:
  \describe{
     \item{\code{rht}}{(robust) Horvitz-Thompson M-estimator of the
-    total/ mean
+    total/mean
     }
-    \item{\code{rwm}}{(robust) robust weighted mean estimator
+    \item{\code{rwm}}{(robust) weighted mean estimator of
     a Hajek-type estimator of the mean.
     }
  }
@@ -90,7 +90,7 @@ Weighted Huber M-estimators of the mean and total are available in two forms:
    the weighted median absolute deviation from the weighted median (MAD, see
    \code{\link{weighted.mad}}).
 
-}
+   }
    \item{\emph{Variance}}{
    Variance estimates of the mean or total estimator are computed as first-order
    linearization using the design-based-estimation capabilities available
@@ -107,6 +107,9 @@ Weighted Huber M-estimators of the mean and total are available in two forms:
    }
 }
 }
+\note{
+\code{huberwgt} is a generic name for the functions documented.
+}
 \section{Utility functions}{
 
 For the methods \code{svymean.huber} and \code{svytotal.huber}, the following
@@ -115,25 +118,26 @@ utility functions can be used
    \item \code{summary} gives a summary of the estimation properties
    \item \code{\link{robweights}} retrieves the robustness weights
    \item \code{coef}, \code{vcov}, \code{residuals}, and \code{fitted}
- retrieve, respectively, the estimate, variance, residuals and fitted
- values
+ retrieve the estimate, variance, residuals and fitted
+ values, respectively
 }
 }
 
 \examples{
+library(survey)
 data(api)
-dstrat <- svydesign(id=~1,strata=~stype, weights=~pw, data=apistrat, fpc=~fpc)
+dstrat <- svydesign(id=~1, strata=~stype, weights=~pw, data=apistrat, fpc=~fpc)
 svymean.huber(~api00, dstrat, k = 2)
 # Domain estimates
 svyby(~api00, by = ~stype, design = dstrat, svymean.huber, k = 1.34)
 }
 \references{
 Hulliger, B. (1995). Outlier Robust Horvitz-Thompson Estimators,
-   \emph{Survey Methodology} 21(1): 79-87.
+\emph{Survey Methodology} 21(1): 79-87.
 }
 \seealso{
 \code{\link{svymean.trimmed}}, \code{\link{svytotal.trimmed}},
 \code{\link{svymean.winsorized}}, \code{\link{svytotal.winsorized}},
-   \code{\link{weighted.mean.trimmed}}, \code{\link{weighted.total.trimmed}}
-   \code{\link{weighted.mean.winsorized}}, \code{\link{weighted.total.winsorized}}
+\code{\link{weighted.mean.trimmed}}, \code{\link{weighted.total.trimmed}}
+\code{\link{weighted.mean.winsorized}}, \code{\link{weighted.total.winsorized}}
 }

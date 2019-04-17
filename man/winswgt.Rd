@@ -13,9 +13,9 @@ weighted.mean.winsorized(x, w, LB = 0.05, UB = 1 - LB, na.rm = FALSE)
 weighted.total.winsorized(x, w, LB = 0.05, UB = 1 - LB,
   na.rm = FALSE)
 
-svymean.winsorized(x, design, LB = 0.05, UB = 1 - LB, ...)
+\method{svymean}{winsorized}(x, design, LB = 0.05, UB = 1 - LB, ...)
 
-svytotal.winsorized(x, design, LB = 0.05, UB = 1 - LB, ...)
+\method{svytotal}{winsorized}(x, design, LB = 0.05, UB = 1 - LB, ...)
 }
 \arguments{
 \item{x}{numeric vector (\code{weighted.mean} or \code{weighted.total}); a

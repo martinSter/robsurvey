@@ -7,8 +7,8 @@
 rht.control(acc = 1e-05, maxit = 100, psi = "Huber", ...)
 }
 \arguments{
-\item{acc}{numeric tolerance, stoping rule in the iterative updating scheme
-(default: \code{1e-5})}
+\item{acc}{numeric tolerance, stoping rule in the iterative
+updating scheme (default: \code{1e-5})}
 
 \item{maxit}{maximum number of updating iterations}
 

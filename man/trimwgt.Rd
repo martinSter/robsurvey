@@ -12,9 +12,9 @@ weighted.mean.trimmed(x, w, LB = 0.05, UB = 1 - LB, na.rm = FALSE)
 
 weighted.total.trimmed(x, w, LB = 0.05, UB = 1 - LB, na.rm = FALSE)
 
-svymean.trimmed(x, design, LB = 0.05, UB = 1 - LB, ...)
+\method{svymean}{trimmed}(x, design, LB = 0.05, UB = 1 - LB, ...)
 
-svytotal.trimmed(x, design, LB = 0.05, UB = 1 - LB, ...)
+\method{svytotal}{trimmed}(x, design, LB = 0.05, UB = 1 - LB, ...)
 }
 \arguments{
 \item{x}{numeric vector (\code{weighted.mean} or \code{weighted.total}); a formula

@@ -144,8 +144,8 @@ weighted.mad <- function(x, w, na.rm = FALSE, constant = 1.4826){
 #' \code{\link{weighted.total.huber}}, \code{\link{svymean.huber}},
 #' \code{\link{svytotal.huber}}.
 #'
-#' @param acc numeric tolerance, stoping rule in the iterative updating scheme
-#'    (default: \code{1e-5})
+#' @param acc numeric tolerance, stoping rule in the iterative
+#' updating scheme (default: \code{1e-5})
 #' @param maxit maximum number of updating iterations
 #' @param psi psi-function (\code{Huber} or \code{asymHuber})
 #' @return List
@@ -159,28 +159,32 @@ rht.control <- function(acc = 1e-5, maxit = 100, psi = "Huber", ...){
    list(acc = unname(acc), maxit = unname(maxit), psi = unname(psi0))
 }
 
-#' Weighted total and mean (Horvitz-Thompson and Hajek estimators)
+
+
+#' @name wgtmeantotal
+#' @aliases weighted.total
+#' @aliases weighted.mean
 #'
-#' Group of functions Description section
+#' @title Weighted total and mean (Horvitz-Thompson and Hajek estimators)
 #'
-#' Group of functions Details paragraph.
+#' @description TBD
 #'
-#' @section After Arguments and Value sections:
-#' Despite its location, this actually comes after the Arguments and Value
-#' sections. Also, don't need to use null, could annotate first function, and
-#' then using function name as the groupBy name is more intuitive.
+#' @details TBD
+#'
+#' @note \code{wgtmeantotal} is a generic name for the functions documented.
 #'
 #' @param x a numeric vector
 #' @param w a numeric vector of weights
-#' @param na.rm a logical value indicating whether \code{NA} values should be
-#'        stripped before the computation proceeds.
+#' @param na.rm a logical value indicating whether \code{NA} values
+#' should be stripped before the computation proceeds.
 #' @return Estimate (scalar)
-#' @name wgtmeantotal
-#' @export wgtmeantotal
-#' @importFrom stats na.omit
-NULL
-
+#'
 #' @rdname wgtmeantotal
+#' @examples
+#' x <- c(0.1, 0.35, 0.05, 0.1, 0.15, 0.05, 0.2)
+#' weighted.total(x, x)
+#' @export
+#' @importFrom stats na.omit
 weighted.total <- function(x, w, na.rm = FALSE){
    if (is.factor(x) || is.factor(w) || is.data.frame(x)){
       stop("Arguments 'x' and 'w' must be numeric vectors\n")
@@ -198,8 +202,12 @@ weighted.total <- function(x, w, na.rm = FALSE){
    }
    return(sum(dat[, 1] * dat[, 2]))
 }
-
 #' @rdname wgtmeantotal
+#' @examples
+#' x <- c(0.1, 0.35, 0.05, 0.1, 0.15, 0.05, 0.2)
+#' weighted.mean(x, x)
+#' @export
+#' @importFrom stats na.omit
 weighted.mean <- function(x, w, na.rm = FALSE){
    if (is.factor(x) || is.factor(w) || is.data.frame(x)){
       stop("Arguments 'x' and 'w' must be numeric vectors\n")
@@ -218,12 +226,17 @@ weighted.mean <- function(x, w, na.rm = FALSE){
    return(sum(dat[ ,1] * dat[, 2]) / sum(dat[, 2]))
 }
 
-#==============================================================================
-#==============================================================================
 
-#' Huber M-estimators of the weighted mean and weighted total
+
+#' @name huberwgt
+#' @aliases weighted.mean.huber
+#' @aliases weighted.total.huber
+#' @aliases svymean.huber
+#' @aliases svytotal.huber
 #'
-#' Weighted Huber M-estimators of the mean and total are available in two forms:
+#' @title Huber M-estimators of the weighted mean and weighted total
+#'
+#' @description Weighted Huber M-estimators of the mean and total are available in two forms:
 #' \itemize{
 #'    \item \strong{bare-bone} functions: \code{weighted.mean.huber} and
 #'	 \code{weighted.total.huber},
@@ -232,7 +245,7 @@ weighted.mean <- function(x, w, na.rm = FALSE){
 #'	 based on the functionality of the \pkg{survey} package).
 #' }
 #'
-#' \describe{
+#' @details \describe{
 #'    \item{\emph{Overview}}{
 #'    Robust M-estimator of the Horvitz--Thompson total or the Hajek mean
 #'	 \itemize{
@@ -244,9 +257,9 @@ weighted.mean <- function(x, w, na.rm = FALSE){
 #'    Two \code{type}s of estimation methods are available:
 #'	 \describe{
 #'	    \item{\code{rht}}{(robust) Horvitz-Thompson M-estimator of the
-#'	    total/ mean
+#'	    total/mean
 #'	    }
-#'	    \item{\code{rwm}}{(robust) robust weighted mean estimator
+#'	    \item{\code{rwm}}{(robust) weighted mean estimator of
 #'	    a Hajek-type estimator of the mean.
 #'	    }
 #'	 }
@@ -274,7 +287,7 @@ weighted.mean <- function(x, w, na.rm = FALSE){
 #'    Estimates for domains can be obtained using the \code{\link[survey]{svyby}}
 #'    wrapper in the \pkg{survey} package (see examples).
 #'    }
-#'}
+#' }
 #'
 #' @section Utility functions:
 #' For the methods \code{svymean.huber} and \code{svytotal.huber}, the following
@@ -283,27 +296,30 @@ weighted.mean <- function(x, w, na.rm = FALSE){
 #'    \item \code{summary} gives a summary of the estimation properties
 #'    \item \code{\link{robweights}} retrieves the robustness weights
 #'    \item \code{coef}, \code{vcov}, \code{residuals}, and \code{fitted}
-#'	 retrieve, respectively, the estimate, variance, residuals and fitted
-#'	 values
+#'	 retrieve the estimate, variance, residuals and fitted
+#'	 values, respectively
 #' }
 #'
+#' @note \code{huberwgt} is a generic name for the functions documented.
+#'
 #' @param x a numeric vector (\code{weighted.[total/mean].huber} or
-#'    \code{weighted.[total/mean].huber}); a formula object or variable name
-#'    (\code{svymean.huber} or \code{svytotal.huber})
-#' @param a w numeric vector of weights
+#' \code{weighted.[total/mean].huber}); a formula object or variable
+#' name (\code{svymean.huber} or \code{svytotal.huber})
+#' @param w a numeric vector of weights
 #' @param design a \code{survey.design} object (see \code{\link[survey]{svydesign}}
-#'    in \pkg{survey})
+#' in \pkg{survey})
 #' @param k a robustness tuning constant, \eqn{k} in \eqn{[0, \infty)}
 #' @param type type of estimator: \code{"rht"} (default) or \code{"rwm"}
 #' @param info logical (default: \code{FALSE}); if \code{TRUE} further
-#'    estimation details are returned
-#' @param na.rm a logical value indicating whether \code{NA} values should be
-#'        stripped before the computation proceeds.
-#' @param ... additional arguments passed to the control object (see
-#'    \code{\link{rht.control}})
+#' estimation details are returned
+#' @param na.rm a logical value indicating whether \code{NA} values should
+#' be stripped before the computation proceeds.
+#' @param ... additional arguments passed to the control object
+#' (see \code{\link{rht.control}})
+#'
 #' @return \itemize{
 #'    \item An estimate (scalar) for \code{weighted.[total/mean].huber}
-#' (unless \code{info=TRUE})
+#'    (unless \code{info=TRUE})
 #'    \item An object of class \code{svystat.rob} for functions of the type
 #'    \code{svy[total/mean].huber}, i.e. a list including the following components:
 #'    \code{characteristic}, \code{estimator}, \code{estimate}, \code{variance},
@@ -312,23 +328,16 @@ weighted.mean <- function(x, w, na.rm = FALSE){
 #' }
 #'
 #' @references Hulliger, B. (1995). Outlier Robust Horvitz-Thompson Estimators,
-#'    \emph{Survey Methodology} 21(1): 79-87.
-#' @name huberwgt
-#' @export huberwgt
-#' @importFrom stats na.omit
-#' @examples
-#' data(api)
-#' dstrat <- svydesign(id=~1,strata=~stype, weights=~pw, data=apistrat, fpc=~fpc)
-#' svymean.huber(~api00, dstrat, k = 2)
-#' # Domain estimates
-#' svyby(~api00, by = ~stype, design = dstrat, svymean.huber, k = 1.34)
+#' \emph{Survey Methodology} 21(1): 79-87.
+#'
 #' @seealso \code{\link{svymean.trimmed}}, \code{\link{svytotal.trimmed}},
 #' \code{\link{svymean.winsorized}}, \code{\link{svytotal.winsorized}},
-#'    \code{\link{weighted.mean.trimmed}}, \code{\link{weighted.total.trimmed}}
-#'    \code{\link{weighted.mean.winsorized}}, \code{\link{weighted.total.winsorized}}
-NULL
-
+#' \code{\link{weighted.mean.trimmed}}, \code{\link{weighted.total.trimmed}}
+#' \code{\link{weighted.mean.winsorized}}, \code{\link{weighted.total.winsorized}}
+#'
 #' @rdname huberwgt
+#' @export
+#' @importFrom stats na.omit
 #' @useDynLib robsurvey rwlslm
 weighted.mean.huber <- function(x, w, k, type = "rht", info = FALSE,
    na.rm = FALSE, ...){
@@ -378,8 +387,8 @@ weighted.mean.huber <- function(x, w, k, type = "rht", info = FALSE,
    }
    return(res)
 }
-
 #' @rdname huberwgt
+#' @export
 weighted.total.huber <- function(x, w, k, type = "rht", info = FALSE,
    na.rm = FALSE, ...){
    res <- weighted.mean.huber(x, w, k, type, info, na.rm, ...)
@@ -391,8 +400,17 @@ weighted.total.huber <- function(x, w, k, type = "rht", info = FALSE,
    }
    return(res)
 }
-
 #' @rdname huberwgt
+#' @examples
+#' library(survey)
+#' data(api)
+#' dstrat <- svydesign(id=~1, strata=~stype, weights=~pw, data=apistrat, fpc=~fpc)
+#' svymean.huber(~api00, dstrat, k = 2)
+#' # Domain estimates
+#' svyby(~api00, by = ~stype, design = dstrat, svymean.huber, k = 1.34)
+#' @export
+#' @importFrom stats model.frame
+#' @importFrom survey weights
 #' @useDynLib robsurvey rwlslm
 svymean.huber <- function(x, design, k, type = "rht", ...){
    ctrl <- rht.control(...)
@@ -446,8 +464,9 @@ svymean.huber <- function(x, design, k, type = "rht", ...){
    class(res) <- "svystat.rob"
    res
 }
-
 #' @rdname huberwgt
+#' @export
+#' @importFrom survey weights
 svytotal.huber <- function(x, design, k, ...){
    tmp <- svymean.huber(x, design, k, type = "rht", ...)
    tmp$characteristic <- "total"
@@ -457,8 +476,15 @@ svytotal.huber <- function(x, design, k, ...){
    tmp
 }
 
-#==============================================================================
-#==============================================================================
+
+
+
+# ---------------------------------------------------------
+# ---------- CONTINUE HERE --------------------------------
+
+
+
+
 
 #' Weighted trimmed mean and trimmed total
 #'
@@ -632,6 +658,8 @@ svytotal.trimmed <- function(x, design, LB = 0.05, UB = 1 - LB, ...){
    tmp$variance <- tmp$variance * sumw^2
    tmp
 }
+
+
 
 
 #==============================================================================

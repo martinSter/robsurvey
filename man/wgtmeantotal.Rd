@@ -15,22 +15,24 @@ weighted.mean(x, w, na.rm = FALSE)
 
 \item{w}{a numeric vector of weights}
 
-\item{na.rm}{a logical value indicating whether \code{NA} values should be
-stripped before the computation proceeds.}
+\item{na.rm}{a logical value indicating whether \code{NA} values
+should be stripped before the computation proceeds.}
 }
 \value{
 Estimate (scalar)
 }
 \description{
-Group of functions Description section
+TBD
 }
 \details{
-Group of functions Details paragraph.
+TBD
 }
-\section{After Arguments and Value sections}{
-
-Despite its location, this actually comes after the Arguments and Value
-sections. Also, don't need to use null, could annotate first function, and
-then using function name as the groupBy name is more intuitive.
+\note{
+\code{wgtmeantotal} is a generic name for the functions documented.
 }
-
+\examples{
+x <- c(0.1, 0.35, 0.05, 0.1, 0.15, 0.05, 0.2)
+weighted.total(x, x)
+x <- c(0.1, 0.35, 0.05, 0.1, 0.15, 0.05, 0.2)
+weighted.mean(x, x)
+}

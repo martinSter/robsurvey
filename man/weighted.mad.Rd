@@ -25,7 +25,7 @@ weighted median
 }
 \details{
 The weighted MAD is computed as the (normalized) weighted median of the
-absolute deviation from the weighted median; the median is compute as the
+absolute deviation from the weighted median; the median is computed as the
 weighted lower sample median (see \code{\link{weighted.median}}); the MAD
 is normalized to be an unbiased estimate of scale at the Gaussian core model.
 }
