@@ -4,8 +4,8 @@
 \alias{winswgt}
 \alias{weighted.mean.winsorized}
 \alias{weighted.total.winsorized}
-\alias{svymean.winsorized}
-\alias{svytotal.winsorized}
+\alias{wsvymean}
+\alias{wsvytotal}
 \title{Weighted winsorized mean and trimmed total}
 \usage{
 weighted.mean.winsorized(x, w, LB = 0.05, UB = 1 - LB, na.rm = FALSE)
@@ -13,24 +13,25 @@ weighted.mean.winsorized(x, w, LB = 0.05, UB = 1 - LB, na.rm = FALSE)
 weighted.total.winsorized(x, w, LB = 0.05, UB = 1 - LB,
   na.rm = FALSE)
 
-\method{svymean}{winsorized}(x, design, LB = 0.05, UB = 1 - LB, ...)
+wsvymean(x, design, LB = 0.05, UB = 1 - LB, ...)
 
-\method{svytotal}{winsorized}(x, design, LB = 0.05, UB = 1 - LB, ...)
+wsvytotal(x, design, LB = 0.05, UB = 1 - LB, ...)
 }
 \arguments{
-\item{x}{numeric vector (\code{weighted.mean} or \code{weighted.total}); a
-formula object or variable name (\code{svymean} or \code{svytotal})}
+\item{x}{numeric vector (\code{weighted.mean.winsorized} or
+\code{weighted.total.winsorized}); a formula object or variable name
+(\code{wsvymean} or \code{wsvytotal})}
 
 \item{w}{numeric vector of weights}
 
-\item{LB}{lower bound of trimming, such that \eqn{0 \leq LB < UB \leq 1}}
+\item{LB}{lower bound of winsorizing, such that \eqn{0 \leq LB < UB \leq 1}}
 
-\item{UB}{upper bound of trimming, such that \eqn{0 \leq LB < UB \leq 1}}
+\item{UB}{upper bound of winsorizing, such that \eqn{0 \leq LB < UB \leq 1}}
 
 \item{na.rm}{a logical value indicating whether \code{NA} values should be
 stripped before the computation proceeds.}
 
-\item{design}{a \code{survey.design} object (see \code{\link[survey]{svydesign}}
+\item{design}{a \code{survey.design} object (see \link[survey]{svydesign}
 in \pkg{survey})}
 
 \item{...}{additional arguments (not used)}
@@ -43,8 +44,8 @@ Weighted winsorized estimators of the mean and total are available in two forms:
 \itemize{
    \item \strong{bare-bone} functions: \code{weighted.mean.winsorized} and
  \code{weighted.total.winsorized},
-   \item estimation \strong{methods}: \code{svymean.winsorized} and
- \code{svytotal.winsorized} (incl. variance estimation
+   \item estimation \strong{methods}: \code{wsvymean} and
+ \code{wsvytotal} (incl. variance estimation
  based on the functionality of the \pkg{survey} package).
 }
 }
@@ -63,14 +64,17 @@ Weighted winsorized estimators of the mean and total are available in two forms:
    in package \pkg{survey}.
    }
    \item{\emph{Domain estimation}}{
-   Estimates for domains can be obtained using the \code{\link[survey]{svyby}}
+   Estimates for domains can be obtained using the \link[survey]{svyby}
    wrapper in the \pkg{survey} package (see examples).
    }
 }
 }
+\note{
+\code{winswgt} is a generic name for the functions documented.
+}
 \section{Utility functions}{
 
-For the methods \code{svymean.winsorized} and \code{svytotal.winsorized}, the following
+For the methods \code{wsvymean} and \code{wsvytotal}, the following
 utility functions can be used
 \itemize{
    \item \code{summary} gives a summary of the estimation properties
@@ -82,15 +86,16 @@ utility functions can be used
 }
 
 \examples{
+library(survey)
 data(api)
-dstrat <- svydesign(id=~1,strata=~stype, weights=~pw, data=apistrat, fpc=~fpc)
-svymean.winsorized(~api00, dstrat, k = 2)
+dstrat <- svydesign(id=~1, strata=~stype, weights=~pw, data=apistrat, fpc=~fpc)
+wsvymean(~api00, dstrat, k = 2)
 # Domain estimates
-svyby(~api00, by = ~stype, design = dstrat, svymean.winsorized, LB = 0.1)
+svyby(~api00, by = ~stype, design = dstrat, wsvymean, LB = 0.1)
 }
 \seealso{
-\code{\link{svymean.huber}}, \code{\link{svytotal.huber}},
-\code{\link{svymean.trimmed}}, \code{\link{svytotal.trimmed}},
-   \code{\link{weighted.mean.huber}}, \code{\link{weighted.total.huber}}
-   \code{\link{weighted.mean.trimmed}}, \code{\link{weighted.total.trimmed}}
+\code{\link{msvymean}}, \code{\link{msvytotal}},
+\code{\link{tsvymean}}, \code{\link{tsvytotal}},
+\code{\link{weighted.mean.huber}}, \code{\link{weighted.total.huber}},
+\code{\link{weighted.mean.trimmed}}, \code{\link{weighted.total.trimmed}}
 }

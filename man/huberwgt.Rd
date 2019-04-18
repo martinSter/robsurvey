@@ -4,8 +4,8 @@
 \alias{huberwgt}
 \alias{weighted.mean.huber}
 \alias{weighted.total.huber}
-\alias{svymean.huber}
-\alias{svytotal.huber}
+\alias{msvymean}
+\alias{msvytotal}
 \title{Huber M-estimators of the weighted mean and weighted total}
 \usage{
 weighted.mean.huber(x, w, k, type = "rht", info = FALSE,
@@ -14,14 +14,14 @@ weighted.mean.huber(x, w, k, type = "rht", info = FALSE,
 weighted.total.huber(x, w, k, type = "rht", info = FALSE,
   na.rm = FALSE, ...)
 
-\method{svymean}{huber}(x, design, k, type = "rht", ...)
+msvymean(x, design, k, type = "rht", ...)
 
-\method{svytotal}{huber}(x, design, k, ...)
+msvytotal(x, design, k, ...)
 }
 \arguments{
 \item{x}{a numeric vector (\code{weighted.[total/mean].huber} or
 \code{weighted.[total/mean].huber}); a formula object or variable
-name (\code{svymean.huber} or \code{svytotal.huber})}
+name (\code{msvymean} or \code{msvytotal})}
 
 \item{w}{a numeric vector of weights}
 
@@ -38,7 +38,7 @@ be stripped before the computation proceeds.}
 \item{...}{additional arguments passed to the control object
 (see \code{\link{rht.control}})}
 
-\item{design}{a \code{survey.design} object (see \code{\link[survey]{svydesign}}
+\item{design}{a \code{survey.design} object (see \link[survey]{svydesign}
 in \pkg{survey})}
 }
 \value{
@@ -46,7 +46,7 @@ in \pkg{survey})}
    \item An estimate (scalar) for \code{weighted.[total/mean].huber}
    (unless \code{info=TRUE})
    \item An object of class \code{svystat.rob} for functions of the type
-   \code{svy[total/mean].huber}, i.e. a list including the following components:
+   \code{msvy[total/mean]}, i.e. a list including the following components:
    \code{characteristic}, \code{estimator}, \code{estimate}, \code{variance},
    \code{robust}, \code{optim}, \code{residuals}, \code{model}, \code{design},
    and \code{call}.
@@ -57,8 +57,8 @@ Weighted Huber M-estimators of the mean and total are available in two forms:
 \itemize{
    \item \strong{bare-bone} functions: \code{weighted.mean.huber} and
  \code{weighted.total.huber},
-   \item estimation \strong{methods}: \code{svymean.huber} and
- \code{svytotal.huber} (incl. variance estimation
+   \item estimation \strong{methods}: \code{msvymean} and
+ \code{msvytotal} (incl. variance estimation
  based on the functionality of the \pkg{survey} package).
 }
 }
@@ -102,7 +102,7 @@ Weighted Huber M-estimators of the mean and total are available in two forms:
    \code{\link{rht.control}} for details.
    }
    \item{\emph{Domain estimation}}{
-   Estimates for domains can be obtained using the \code{\link[survey]{svyby}}
+   Estimates for domains can be obtained using the \link[survey]{svyby}
    wrapper in the \pkg{survey} package (see examples).
    }
 }
@@ -112,7 +112,7 @@ Weighted Huber M-estimators of the mean and total are available in two forms:
 }
 \section{Utility functions}{
 
-For the methods \code{svymean.huber} and \code{svytotal.huber}, the following
+For the methods \code{msvymean} and \code{msvytotal}, the following
 utility functions can be used
 \itemize{
    \item \code{summary} gives a summary of the estimation properties
@@ -127,17 +127,17 @@ utility functions can be used
 library(survey)
 data(api)
 dstrat <- svydesign(id=~1, strata=~stype, weights=~pw, data=apistrat, fpc=~fpc)
-svymean.huber(~api00, dstrat, k = 2)
+msvymean(~api00, dstrat, k = 2)
 # Domain estimates
-svyby(~api00, by = ~stype, design = dstrat, svymean.huber, k = 1.34)
+svyby(~api00, by = ~stype, design = dstrat, msvymean, k = 1.34)
 }
 \references{
 Hulliger, B. (1995). Outlier Robust Horvitz-Thompson Estimators,
 \emph{Survey Methodology} 21(1): 79-87.
 }
 \seealso{
-\code{\link{svymean.trimmed}}, \code{\link{svytotal.trimmed}},
-\code{\link{svymean.winsorized}}, \code{\link{svytotal.winsorized}},
+\code{\link{tsvymean}}, \code{\link{tsvytotal}},
+\code{\link{wsvymean}}, \code{\link{wsvytotal}},
 \code{\link{weighted.mean.trimmed}}, \code{\link{weighted.total.trimmed}}
 \code{\link{weighted.mean.winsorized}}, \code{\link{weighted.total.winsorized}}
 }
