@@ -6,13 +6,16 @@
 \usage{
 robweights(object)
 }
+\arguments{
+\item{object}{class of type \code{svystat.rob}}
+}
 \value{
 Vector of robustness weights
 }
 \description{
-\code{robweights} retrieves the robustness weights from an M-estimator of class
-   \code{svystat.rob}
+\code{robweights} retrieves the robustness weights from
+an M-estimator of class \code{svystat.rob}.
 }
 \details{
-Extracts the robustness weights
+Extracts the robustness weights.
 }
