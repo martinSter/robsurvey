@@ -409,7 +409,7 @@ weighted.total.huber <- function(x, w, k, type = "rht", info = FALSE,
 #' # Domain estimates
 #' svyby(~api00, by = ~stype, design = dstrat, msvymean, k = 1.34)
 #' @export msvymean
-#' @importFrom stats model.frame
+#' @importFrom stats model.frame, na.fail
 #' @useDynLib robsurvey rwlslm
 msvymean <- function(x, design, k, type = "rht", ...){
    ctrl <- rht.control(...)
@@ -593,7 +593,7 @@ weighted.total.trimmed <- function(x, w, LB = 0.05, UB = 1 - LB, na.rm = FALSE){
 #' # Domain estimates
 #' svyby(~api00, by = ~stype, design = dstrat, tsvymean, LB = 0.1)
 #' @export tsvymean
-#' @importFrom stats model.frame
+#' @importFrom stats model.frame, na.fail
 tsvymean <- function(x, design, LB = 0.05, UB = 1 - LB, ...){
    if (class(x) == "formula"){
       mf <- model.frame(x, design$variables, na.action = na.fail)
@@ -780,7 +780,7 @@ weighted.total.winsorized <- function(x, w, LB = 0.05, UB = 1 - LB, na.rm = FALS
 #' # Domain estimates
 #' svyby(~api00, by = ~stype, design = dstrat, wsvymean, LB = 0.1)
 #' @export wsvymean
-#' @importFrom stats model.frame
+#' @importFrom stats model.frame, na.fail
 wsvymean <- function(x, design, LB = 0.05, UB = 1 - LB, ...){
    if (class(x) == "formula"){
       mf <- model.frame(x, design$variables, na.action = na.fail)
@@ -867,6 +867,7 @@ wsvytotal <- function(x, design, LB = 0.05, UB = 1 - LB, ...){
 #' @author Tobias Schoch and Beat Hulliger
 #' @name weighted.line
 #' @export weighted.line
+#' @importFrom stats complete.cases
 weighted.line <- function(x, y=NULL, w, na.rm=FALSE, iter = 1){
 
   # quantiles as implemented in line() but with weights
