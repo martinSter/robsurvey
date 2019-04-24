@@ -1,3 +1,97 @@
+#' robsurvey: Robust survey statistics.
+#'
+#' The package robsurvey is a collection of functions for robust survey
+#' statistics.
+#'
+#' @section robsurvey functions:
+#' robust Horvitz-Thompson M-estimator of mean and total in \code{msvymean()}
+#' and \code{msvytotal()}, robust trimmed Horvitz-Thompson estimator of mean
+#' and total in \code{tsvymean()} and \code{tsvytotal()}, robust winsorized
+#' Horvitz-Thompson estimator of mean and total in \code{wsvymean()} and
+#' \code{wsvytotal()}, weighted median estimator in \code{weighted.median()},
+#' weighted quantile estimator in \code{weighted.quantile()}, weighted median
+#' absolute deviation in \code{weighted.mad()}, weighted mean and total
+#' estimators in \code{weighted.mean()} and \code{weighted.total()}.
+#'
+#' @references
+#' Hulliger, B. (1995). Outlier Robust Horvitz-Thompson Estimators.
+#' Survey Methodology, 21, 79 - 87.
+#'
+#' Hulliger, B. (2011). Main Results of the AMELI Simulation Study
+#' on Advanced Methods for Laeken Indicators. In Proceedings of
+#' NTTS2011, Brussels.
+#'
+#' @docType package
+#' @name robsurvey
+NULL
+
+
+
+#' Bushfire scars.
+#'
+#' The bushfire data set was used by Campbell (1984, 1989) to locate bushfire scars.
+#' The dataset contains satellite measurements on five frequency bands, corresponding
+#' to each of 38 pixels.
+#'
+#' The data contains an outlying cluster of observations 33 to 38 a second outlier
+#' cluster of observations 7 to 11 and a few more isolated outliers, namely observations
+#' 12, 13, 31 and 32.
+#'
+#' For testing purposes weights are provided:
+#' \code{bushfire.weights <- rep(c(1,2,5), length = nrow(bushfire))}
+#'
+#' @format A data frame with 38 rows and 5 variables.
+#' @references Campbell, N. (1989) Bushfire Mapping using NOAA AVHRR Data. Technical Report.
+#' Commonwealth Scientific and Industrial Research Organisation, North Ryde.
+#' @examples
+#' data(bushfire)
+"bushfire"
+
+
+
+#' Bushfire scars with missing data.
+#'
+#' The bushfire data set was used by Campbell (1984, 1989) to locate bushfire scars.
+#' The dataset contains satellite measurements on five frequency bands, corresponding
+#' to each of 38 pixels. However, this dataset contains missing values.
+#'
+#' The data contains an outlying cluster of observations 33 to 38 a second outlier
+#' cluster of observations 7 to 11 and a few more isolated outliers, namely observations
+#' 12, 13, 31 and 32.
+#'
+#' \code{bushfirem} is created from bushfire by setting a proportion of 0.2 of the values
+#' to missing.
+#'
+#' For testing purposes weights are provided:
+#' \code{bushfire.weights <- rep(c(1,2,5), length = nrow(bushfire))}
+#'
+#' @format A data frame with 38 rows and 5 variables.
+#' @references Campbell, N. (1989) Bushfire Mapping using NOAA AVHRR Data. Technical Report.
+#' Commonwealth Scientific and Industrial Research Organisation, North Ryde.
+#' @examples
+#' data(bushfirem)
+"bushfirem"
+
+
+
+#' Weights for Bushfire scars.
+#'
+#' The bushfire data set was used by Campbell (1984, 1989) to locate bushfire scars.
+#' The dataset contains satellite measurements on five frequency bands, corresponding
+#' to each of 38 pixels.
+#'
+#' For testing purposes, \code{bushfire.weights} provides artificial weights created
+#' according to: \code{bushfire.weights <- rep(c(1,2,5), length = nrow(bushfire))}
+#'
+#' @format A vector of length 38.
+#' @references Campbell, N. (1989) Bushfire Mapping using NOAA AVHRR Data. Technical Report.
+#' Commonwealth Scientific and Industrial Research Organisation, North Ryde.
+#' @examples
+#' data(bushfire.weights)
+"bushfire.weights"
+
+
+
 #' Weighted lower sample median
 #'
 #' \code{weighted.median} computes the weighted lower sample median
@@ -141,13 +235,14 @@ weighted.mad <- function(x, w, na.rm = FALSE, constant = 1.4826){
 #' This function is called internally.
 #'
 #' Tuning parameters for \code{\link{weighted.mean.huber}},
-#' \code{\link{weighted.total.huber}}, \code{\link{svymean.huber}},
-#' \code{\link{svytotal.huber}}.
+#' \code{\link{weighted.total.huber}}, \code{\link{msvymean}},
+#' \code{\link{msvytotal}}.
 #'
 #' @param acc numeric tolerance, stoping rule in the iterative
 #' updating scheme (default: \code{1e-5})
 #' @param maxit maximum number of updating iterations
 #' @param psi psi-function (\code{Huber} or \code{asymHuber})
+#' @param ... additional arguments
 #' @return List
 #' @export rht.control
 rht.control <- function(acc = 1e-5, maxit = 100, psi = "Huber", ...){
@@ -409,7 +504,8 @@ weighted.total.huber <- function(x, w, k, type = "rht", info = FALSE,
 #' # Domain estimates
 #' svyby(~api00, by = ~stype, design = dstrat, msvymean, k = 1.34)
 #' @export msvymean
-#' @importFrom stats model.frame, na.fail
+#' @importFrom stats model.frame na.fail
+#' @importFrom stats weights
 #' @useDynLib robsurvey rwlslm
 msvymean <- function(x, design, k, type = "rht", ...){
    ctrl <- rht.control(...)
@@ -465,6 +561,7 @@ msvymean <- function(x, design, k, type = "rht", ...){
 }
 #' @rdname huberwgt
 #' @export msvytotal
+#' @importFrom stats weights
 msvytotal <- function(x, design, k, ...){
    tmp <- msvymean(x, design, k, type = "rht", ...)
    tmp$characteristic <- "total"
@@ -593,7 +690,8 @@ weighted.total.trimmed <- function(x, w, LB = 0.05, UB = 1 - LB, na.rm = FALSE){
 #' # Domain estimates
 #' svyby(~api00, by = ~stype, design = dstrat, tsvymean, LB = 0.1)
 #' @export tsvymean
-#' @importFrom stats model.frame, na.fail
+#' @importFrom stats model.frame na.fail
+#' @importFrom stats weights
 tsvymean <- function(x, design, LB = 0.05, UB = 1 - LB, ...){
    if (class(x) == "formula"){
       mf <- model.frame(x, design$variables, na.action = na.fail)
@@ -649,6 +747,7 @@ tsvymean <- function(x, design, LB = 0.05, UB = 1 - LB, ...){
 }
 #' @rdname trimwgt
 #' @export tsvytotal
+#' @importFrom stats weights
 tsvytotal <- function(x, design, LB = 0.05, UB = 1 - LB, ...){
    tmp <- tsvymean(x, design, LB, UB)
    tmp$characteristic <- "total"
@@ -780,7 +879,8 @@ weighted.total.winsorized <- function(x, w, LB = 0.05, UB = 1 - LB, na.rm = FALS
 #' # Domain estimates
 #' svyby(~api00, by = ~stype, design = dstrat, wsvymean, LB = 0.1)
 #' @export wsvymean
-#' @importFrom stats model.frame, na.fail
+#' @importFrom stats model.frame na.fail
+#' @importFrom stats weights
 wsvymean <- function(x, design, LB = 0.05, UB = 1 - LB, ...){
    if (class(x) == "formula"){
       mf <- model.frame(x, design$variables, na.action = na.fail)
@@ -837,6 +937,7 @@ wsvymean <- function(x, design, LB = 0.05, UB = 1 - LB, ...){
 }
 #' @rdname winswgt
 #' @export wsvytotal
+#' @importFrom stats weights
 wsvytotal <- function(x, design, LB = 0.05, UB = 1 - LB, ...){
    tmp <- wsvymean(x, design, LB, UB)
    tmp$characteristic <- "total"
@@ -848,26 +949,27 @@ wsvytotal <- function(x, design, LB = 0.05, UB = 1 - LB, ...){
 
 
 
-#==============================================================================
-# TODO
-#==============================================================================
-
-#' PROJECT refactoring the function stats::line from C to R and allow weights
-#' AUTHORS Tobias Schoch (tobias.schoch@fhnw.ch), Beat Hulliger
-#' Needs a weighted median function weighted.median(x,w)
-#' Uses different quantiles for splitting the sample than line()
+#' Weighted robust line fitting
 #'
-#' @param x the vector of the explanatory variable
-#' @param y the vector the response varialbe
-#' @param w the vector of the weights
-#' @param iter number of iterations for enhancing the slop
-#' @return intercept and slope
-#' @examples weighted.line(cars$speed, cars$dist)
-#' @examples weighted.line(cars$speed, cars$dist, w=rep(1:10, each=5))
-#' @author Tobias Schoch and Beat Hulliger
-#' @name weighted.line
+#' \code{weighted.line} fits a robust line and allows weights.
+#'
+#' Uses different quantiles for splitting the sample than \code{line()}.
+#' Is based on \code{weighted.median()}.
+#'
+#' @param x a numeric vector (explanatory variable)
+#' @param y a numeric vector (response variable)
+#' @param w a numeric vector of weights
+#' @param iter number of iterations for enhancing the slope
+#' @param na.rm a logical value indicating whether rows with \code{NA}
+#' values should be stripped before the computation proceeds
+#' @return intercept and slope of the fitted line
+#' @examples
+#' data(cars)
+#' weighted.line(cars$speed, cars$dist)
+#' weighted.line(cars$speed, cars$dist, w=rep(1:10, each=5))
+#' @seealso \code{\link[stats]{line}}
 #' @export weighted.line
-#' @importFrom stats complete.cases
+#' @importFrom stats model.frame complete.cases
 weighted.line <- function(x, y=NULL, w, na.rm=FALSE, iter = 1){
 
   # quantiles as implemented in line() but with weights
@@ -932,33 +1034,29 @@ weighted.line <- function(x, y=NULL, w, na.rm=FALSE, iter = 1){
 }
 
 
+
 #' Robust simple linear regression based on medians
 #'
-#' For type medslopes the median individual ratios response/explanatory is used
-#' as estimator of the slope. For version ratiomeds the ratio of the median crossproduct to the
-#' median of squares of the explanatory variable is used as the estimator of the slope.
-#' Survey weights may be used. Missing values are neglected.
-#' Uses utility function \code{weighted.median()}.
-#' The median of slopes (type="slopes") uses b1=M((y-M(y,w))/(x-M(x,w)), w).
-#' The median of crossproducts by median of squares (type="products") uses
-#' b1=M((y-M(y,w))(x-M(x,w)), w )/ M((x-M(x,w )^2), w ), where M(x, w)
-#' is shorthand for the function weighted.median(x, w).
+#' For type medslopes the median individual ratios response/explanatory
+#' is used as estimator of the slope. For version ratiomeds the ratio of
+#' the median crossproduct to the median of squares of the explanatory
+#' variable is used as the estimator of the slope. Survey weights may be used.
+#' Missing values are neglected.
+#'
+#' Uses \code{weighted.median()}. The median of slopes (type="slopes")
+#' uses \eqn{b1=M((y-M(y,w))/(x-M(x,w)), w)}. The median of crossproducts
+#' by median of squares (type="products") uses
+#' \eqn{b1=M((y-M(y,w))(x-M(x,w)), w )/ M((x-M(x,w )^2), w )}, where
+#' \eqn{M(x, w)} is shorthand for the function \code{weighted.median(x, w)}.
 #' The function allows weights and missing values.
 #'
-#' @param x is the vector of the explanatory variable
-#' @param y is the vector of the response variable
-#' @param w is the vector of (optional) weights
-#' @param type is either "slopes" (default) or "products"
-#' @param na.rm logical TRUE when complete cases should be used
-#'
+#' @param x a numeric vector (explanatory variable)
+#' @param y a numeric vector (response variable)
+#' @param w a numeric vector of weights
+#' @param type either "slopes" (default) or "products"
+#' @param na.rm a logical value indicating whether rows with \code{NA}
+#' values should be stripped before the computation proceeds
 #' @return a vector with two components: intercept and slope
-#'
-#' @name weighted.median.line
-#'
-#' @seealso [line(), weighted.line(), weighted.median.ratio()]
-#'
-#' @author Beat Hulliger
-#'
 #' @examples
 #' x <- c(1, 2, 4, 5)
 #' y <- c(3, 2, 7, 4)
@@ -985,10 +1083,12 @@ weighted.line <- function(x, y=NULL, w, na.rm=FALSE, iter = 1){
 #' cars$speed[49] <- 72
 #' with(cars, weighted.median.line(dist ~ speed))
 #' with(cars, weighted.median.line(dist ~ speed, type="prod"))
-
-
-weighted.median.line <- function(x, y=NULL, w, type="slopes", na.rm=FALSE)
-{
+#' @seealso \code{\link[stats]{line}}, \code{\link{weighted.line}},
+#' \code{\link{weighted.median.ratio}}
+#' @export weighted.median.line
+#' @importFrom stats complete.cases
+#' @importFrom grDevices xy.coords
+weighted.median.line <- function(x, y=NULL, w, type="slopes", na.rm=FALSE){
 
   if (inherits(x, "formula")) {
     dat <- xy.coords(x)
@@ -1034,30 +1134,30 @@ weighted.median.line <- function(x, y=NULL, w, type="slopes", na.rm=FALSE)
 }
 
 
+
 #' Weighted robust ratio based on median
 #'
-#'  A weighted median of the ratios y/x determines the slope of a
-#'  regression through the origin.
+#' A weighted median of the ratios y/x determines the slope of a
+#' regression through the origin.
 #'
-#' @param x is the vector of the explanatory variable, x>=0.
-#' @param y is the vector of the response variable, y>=0.
-#' @param w is the vector of (optional) weights, w>=0 and sum(w)>0.
-#' @param na.rm logical TRUE when complete cases should be used
+#' TBD
 #'
+#' @param x a numeric vector (explanatory variable)
+#' @param y a numeric vector (response variable)
+#' @param w a numeric vector of (optional) weights
+#' @param na.rm a logical value indicating whether rows with \code{NA}
+#' values should be stripped before the computation proceeds
 #' @return a vector with two components: intercept and slope
-#'
-#' @seealso [line(), weighted.line(), weighted.median.line()]
-#'
-#' @author Beat Hulliger
-#'
 #' @examples
 #' x <- c(1,2,4,5)
 #' y <- c(1,0,5,2)
 #' weighted.median.ratio(y~x)
-
-
-weighted.median.ratio <- function(x, y=NULL, w, na.rm=FALSE)
-{
+#' @seealso \code{\link[stats]{line}}, \code{\link{weighted.line}},
+#' \code{\link{weighted.median.line}}
+#' @export weighted.median.ratio
+#' @importFrom stats complete.cases
+#' @importFrom grDevices xy.coords
+weighted.median.ratio <- function(x, y=NULL, w, na.rm=FALSE){
 
   if (inherits(x, "formula")) {
     dat <- xy.coords(x)
@@ -1088,9 +1188,6 @@ weighted.median.ratio <- function(x, y=NULL, w, na.rm=FALSE)
                  residuals = y - yhat, fitted.values = yhat), class = "medline")
 
 }
-
-#==============================================================================
-#==============================================================================
 
 
 
