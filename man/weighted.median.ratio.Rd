@@ -7,20 +7,24 @@
 weighted.median.ratio(x, y = NULL, w, na.rm = FALSE)
 }
 \arguments{
-\item{x}{is the vector of the explanatory variable, x>=0.}
+\item{x}{a numeric vector (explanatory variable)}
 
-\item{y}{is the vector of the response variable, y>=0.}
+\item{y}{a numeric vector (response variable)}
 
-\item{w}{is the vector of (optional) weights, w>=0 and sum(w)>0.}
+\item{w}{a numeric vector of (optional) weights}
 
-\item{na.rm}{logical TRUE when complete cases should be used}
+\item{na.rm}{a logical value indicating whether rows with \code{NA}
+values should be stripped before the computation proceeds}
 }
 \value{
 a vector with two components: intercept and slope
 }
 \description{
 A weighted median of the ratios y/x determines the slope of a
- regression through the origin.
+regression through the origin.
+}
+\details{
+TBD
 }
 \examples{
 x <- c(1,2,4,5)
@@ -28,8 +32,6 @@ y <- c(1,0,5,2)
 weighted.median.ratio(y~x)
 }
 \seealso{
-[line(), weighted.line(), weighted.median.line()]
-}
-\author{
-Beat Hulliger
+\code{\link[stats]{line}}, \code{\link{weighted.line}},
+\code{\link{weighted.median.line}}
 }

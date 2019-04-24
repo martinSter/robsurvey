@@ -13,6 +13,8 @@ updating scheme (default: \code{1e-5})}
 \item{maxit}{maximum number of updating iterations}
 
 \item{psi}{psi-function (\code{Huber} or \code{asymHuber})}
+
+\item{...}{additional arguments}
 }
 \value{
 List
@@ -22,6 +24,6 @@ This function is called internally.
 }
 \details{
 Tuning parameters for \code{\link{weighted.mean.huber}},
-\code{\link{weighted.total.huber}}, \code{\link{svymean.huber}},
-\code{\link{svytotal.huber}}.
+\code{\link{weighted.total.huber}}, \code{\link{msvymean}},
+\code{\link{msvytotal}}.
 }

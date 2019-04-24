@@ -2,35 +2,37 @@
 % Please edit documentation in R/robsurvey.R
 \name{weighted.line}
 \alias{weighted.line}
-\title{PROJECT refactoring the function stats::line from C to R and allow weights
-AUTHORS Tobias Schoch (tobias.schoch@fhnw.ch), Beat Hulliger
-Needs a weighted median function weighted.median(x,w)
-Uses different quantiles for splitting the sample than line()}
+\title{Weighted robust line fitting}
 \usage{
 weighted.line(x, y = NULL, w, na.rm = FALSE, iter = 1)
 }
 \arguments{
-\item{x}{the vector of the explanatory variable}
+\item{x}{a numeric vector (explanatory variable)}
 
-\item{y}{the vector the response varialbe}
+\item{y}{a numeric vector (response variable)}
 
-\item{w}{the vector of the weights}
+\item{w}{a numeric vector of weights}
 
-\item{iter}{number of iterations for enhancing the slop}
+\item{na.rm}{a logical value indicating whether rows with \code{NA}
+values should be stripped before the computation proceeds}
+
+\item{iter}{number of iterations for enhancing the slope}
 }
 \value{
-intercept and slope
+intercept and slope of the fitted line
 }
 \description{
-PROJECT refactoring the function stats::line from C to R and allow weights
-AUTHORS Tobias Schoch (tobias.schoch@fhnw.ch), Beat Hulliger
-Needs a weighted median function weighted.median(x,w)
-Uses different quantiles for splitting the sample than line()
+\code{weighted.line} fits a robust line and allows weights.
+}
+\details{
+Uses different quantiles for splitting the sample than \code{line()}.
+Is based on \code{weighted.median()}.
 }
 \examples{
+data(cars)
 weighted.line(cars$speed, cars$dist)
 weighted.line(cars$speed, cars$dist, w=rep(1:10, each=5))
 }
-\author{
-Tobias Schoch and Beat Hulliger
+\seealso{
+\code{\link[stats]{line}}
 }

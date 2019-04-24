@@ -7,29 +7,33 @@
 weighted.median.line(x, y = NULL, w, type = "slopes", na.rm = FALSE)
 }
 \arguments{
-\item{x}{is the vector of the explanatory variable}
+\item{x}{a numeric vector (explanatory variable)}
 
-\item{y}{is the vector of the response variable}
+\item{y}{a numeric vector (response variable)}
 
-\item{w}{is the vector of (optional) weights}
+\item{w}{a numeric vector of weights}
 
-\item{type}{is either "slopes" (default) or "products"}
+\item{type}{either "slopes" (default) or "products"}
 
-\item{na.rm}{logical TRUE when complete cases should be used}
+\item{na.rm}{a logical value indicating whether rows with \code{NA}
+values should be stripped before the computation proceeds}
 }
 \value{
 a vector with two components: intercept and slope
 }
 \description{
-For type medslopes the median individual ratios response/explanatory is used
-as estimator of the slope. For version ratiomeds the ratio of the median crossproduct to the
-median of squares of the explanatory variable is used as the estimator of the slope.
-Survey weights may be used. Missing values are neglected.
-Uses utility function \code{weighted.median()}.
-The median of slopes (type="slopes") uses b1=M((y-M(y,w))/(x-M(x,w)), w).
-The median of crossproducts by median of squares (type="products") uses
-b1=M((y-M(y,w))(x-M(x,w)), w )/ M((x-M(x,w )^2), w ), where M(x, w)
-is shorthand for the function weighted.median(x, w).
+For type medslopes the median individual ratios response/explanatory
+is used as estimator of the slope. For version ratiomeds the ratio of
+the median crossproduct to the median of squares of the explanatory
+variable is used as the estimator of the slope. Survey weights may be used.
+Missing values are neglected.
+}
+\details{
+Uses \code{weighted.median()}. The median of slopes (type="slopes")
+uses \eqn{b1=M((y-M(y,w))/(x-M(x,w)), w)}. The median of crossproducts
+by median of squares (type="products") uses
+\eqn{b1=M((y-M(y,w))(x-M(x,w)), w )/ M((x-M(x,w )^2), w )}, where
+\eqn{M(x, w)} is shorthand for the function \code{weighted.median(x, w)}.
 The function allows weights and missing values.
 }
 \examples{
@@ -60,8 +64,6 @@ with(cars, weighted.median.line(dist ~ speed))
 with(cars, weighted.median.line(dist ~ speed, type="prod"))
 }
 \seealso{
-[line(), weighted.line(), weighted.median.ratio()]
-}
-\author{
-Beat Hulliger
+\code{\link[stats]{line}}, \code{\link{weighted.line}},
+\code{\link{weighted.median.ratio}}
 }
