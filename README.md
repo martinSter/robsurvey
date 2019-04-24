@@ -38,9 +38,14 @@ Example
 In the following example, we showcase a typical use of the package **robsurvey**. The data we use are from the package **survey** and describe the student performance in California schools. We will show different ways of how to compute a robust mean value for the Academic Performance Index (API) in 2000. The variable is denoted as `api00`. The following code chunk simply loads the data and defines the survey design (based on the **survey** package).
 
 ``` r
-## basic example code
+## load packages
 library(robsurvey)
-#> Loading required package: survey
+#> 
+#> Attaching package: 'robsurvey'
+#> The following object is masked from 'package:stats':
+#> 
+#>     weighted.mean
+library(survey)
 #> Warning: package 'survey' was built under R version 3.5.3
 #> Loading required package: grid
 #> Loading required package: Matrix
@@ -50,11 +55,6 @@ library(robsurvey)
 #> The following object is masked from 'package:graphics':
 #> 
 #>     dotchart
-#> 
-#> Attaching package: 'robsurvey'
-#> The following object is masked from 'package:stats':
-#> 
-#>     weighted.mean
 
 # load the api dataset
 data(api)
