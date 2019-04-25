@@ -89,7 +89,7 @@ utility functions can be used
 library(survey)
 data(api)
 dstrat <- svydesign(id=~1, strata=~stype, weights=~pw, data=apistrat, fpc=~fpc)
-wsvymean(~api00, dstrat, k = 2)
+wsvymean(~api00, dstrat, LB = 0.05)
 # Domain estimates
 svyby(~api00, by = ~stype, design = dstrat, wsvymean, LB = 0.1)
 }
