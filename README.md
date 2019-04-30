@@ -21,6 +21,9 @@ The following functions are provided in **robsurvey**:
 -   `tsvytotal()`
 -   `wsvymean()`
 -   `wsvytotal()`
+-   `weighted.line()`
+-   `weighted.median.line()`
+-   `weighted.median.ratio()`
 
 Installation
 ------------
