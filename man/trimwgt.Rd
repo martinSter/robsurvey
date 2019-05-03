@@ -2,23 +2,23 @@
 % Please edit documentation in R/robsurvey.R
 \name{trimwgt}
 \alias{trimwgt}
-\alias{weighted.mean.trimmed}
-\alias{weighted.total.trimmed}
-\alias{tsvymean}
-\alias{tsvytotal}
+\alias{weighted_mean_trimmed}
+\alias{weighted_total_trimmed}
+\alias{svymean_trimmed}
+\alias{svytotal_trimmed}
 \title{Weighted trimmed mean and trimmed total}
 \usage{
-weighted.mean.trimmed(x, w, LB = 0.05, UB = 1 - LB, na.rm = FALSE)
+weighted_mean_trimmed(x, w, LB = 0.05, UB = 1 - LB, na.rm = FALSE)
 
-weighted.total.trimmed(x, w, LB = 0.05, UB = 1 - LB, na.rm = FALSE)
+weighted_total_trimmed(x, w, LB = 0.05, UB = 1 - LB, na.rm = FALSE)
 
-tsvymean(x, design, LB = 0.05, UB = 1 - LB, ...)
+svymean_trimmed(x, design, LB = 0.05, UB = 1 - LB, ...)
 
-tsvytotal(x, design, LB = 0.05, UB = 1 - LB, ...)
+svytotal_trimmed(x, design, LB = 0.05, UB = 1 - LB, ...)
 }
 \arguments{
-\item{x}{numeric vector (\code{weighted.mean.trimmed} or \code{weighted.total.trimmed});
-a formula object or variable name (\code{tsvymean} or \code{tsvytotal})}
+\item{x}{numeric vector (\code{weighted_mean_trimmed} or \code{weighted_total_trimmed});
+a formula object or variable name (\code{svymean_trimmed} or \code{svytotal_trimmed})}
 
 \item{w}{numeric vector of weights}
 
@@ -39,10 +39,10 @@ Estimate (scalar) or object of class \code{svystat.rob}
 \description{
 Weighted trimmed estimators of the mean and total are available in two forms:
 \itemize{
-   \item \strong{bare-bone} functions: \code{weighted.mean.trimmed} and
- \code{weighted.total.trimmed},
-   \item estimation \strong{methods}: \code{tsvymean} and
- \code{tsvytotal} (incl. variance estimation
+   \item \strong{bare-bone} functions: \code{weighted_mean_trimmed} and
+ \code{weighted_total_trimmed},
+   \item estimation \strong{methods}: \code{svymean_trimmed} and
+ \code{svytotal_trimmed} (incl. variance estimation
  based on the functionality of the \pkg{survey} package).
 }
 }
@@ -71,7 +71,7 @@ Weighted trimmed estimators of the mean and total are available in two forms:
 }
 \section{Utility functions}{
 
-For the methods \code{tsvymean} and \code{tsvytotal}, the following
+For the methods \code{svymean_trimmed} and \code{svytotal_trimmed}, the following
 utility functions can be used
 \itemize{
    \item \code{summary} gives a summary of the estimation properties
@@ -86,13 +86,13 @@ utility functions can be used
 library(survey)
 data(api)
 dstrat <- svydesign(id=~1, strata=~stype, weights=~pw, data=apistrat, fpc=~fpc)
-tsvymean(~api00, dstrat, LB = 0.05)
+svymean_trimmed(~api00, dstrat, LB = 0.05)
 # Domain estimates
-svyby(~api00, by = ~stype, design = dstrat, tsvymean, LB = 0.1)
+svyby(~api00, by = ~stype, design = dstrat, svymean_trimmed, LB = 0.1)
 }
 \seealso{
-\code{\link{msvymean}}, \code{\link{msvytotal}},
-\code{\link{wsvymean}}, \code{\link{wsvytotal}},
-\code{\link{weighted.mean.huber}}, \code{\link{weighted.total.huber}},
-\code{\link{weighted.mean.winsorized}}, \code{\link{weighted.total.winsorized}}
+\code{\link{svymean_huber}}, \code{\link{svytotal_huber}},
+\code{\link{svymean_winsorized}}, \code{\link{svytotal_winsorized}},
+\code{\link{weighted_mean_huber}}, \code{\link{weighted_total_huber}},
+\code{\link{weighted_mean_winsorized}}, \code{\link{weighted_total_winsorized}}
 }

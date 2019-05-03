@@ -2,25 +2,25 @@
 % Please edit documentation in R/robsurvey.R
 \name{winswgt}
 \alias{winswgt}
-\alias{weighted.mean.winsorized}
-\alias{weighted.total.winsorized}
-\alias{wsvymean}
-\alias{wsvytotal}
+\alias{weighted_mean_winsorized}
+\alias{weighted_total_winsorized}
+\alias{svymean_winsorized}
+\alias{svytotal_winsorized}
 \title{Weighted winsorized mean and trimmed total}
 \usage{
-weighted.mean.winsorized(x, w, LB = 0.05, UB = 1 - LB, na.rm = FALSE)
+weighted_mean_winsorized(x, w, LB = 0.05, UB = 1 - LB, na.rm = FALSE)
 
-weighted.total.winsorized(x, w, LB = 0.05, UB = 1 - LB,
+weighted_total_winsorized(x, w, LB = 0.05, UB = 1 - LB,
   na.rm = FALSE)
 
-wsvymean(x, design, LB = 0.05, UB = 1 - LB, ...)
+svymean_winsorized(x, design, LB = 0.05, UB = 1 - LB, ...)
 
-wsvytotal(x, design, LB = 0.05, UB = 1 - LB, ...)
+svytotal_winsorized(x, design, LB = 0.05, UB = 1 - LB, ...)
 }
 \arguments{
-\item{x}{numeric vector (\code{weighted.mean.winsorized} or
-\code{weighted.total.winsorized}); a formula object or variable name
-(\code{wsvymean} or \code{wsvytotal})}
+\item{x}{numeric vector (\code{weighted_mean_winsorized} or
+\code{weighted_total_winsorized}); a formula object or variable name
+(\code{svymean_winsorized} or \code{svytotal_winsorized})}
 
 \item{w}{numeric vector of weights}
 
@@ -42,10 +42,10 @@ Estimate (scalar) or object of class \code{svystat.rob}
 \description{
 Weighted winsorized estimators of the mean and total are available in two forms:
 \itemize{
-   \item \strong{bare-bone} functions: \code{weighted.mean.winsorized} and
- \code{weighted.total.winsorized},
-   \item estimation \strong{methods}: \code{wsvymean} and
- \code{wsvytotal} (incl. variance estimation
+   \item \strong{bare-bone} functions: \code{weighted_mean_winsorized} and
+ \code{weighted_total_winsorized},
+   \item estimation \strong{methods}: \code{svymean_winsorized} and
+ \code{svytotal_winsorized} (incl. variance estimation
  based on the functionality of the \pkg{survey} package).
 }
 }
@@ -74,7 +74,7 @@ Weighted winsorized estimators of the mean and total are available in two forms:
 }
 \section{Utility functions}{
 
-For the methods \code{wsvymean} and \code{wsvytotal}, the following
+For the methods \code{svymean_winsorized} and \code{svytotal_winsorized}, the following
 utility functions can be used
 \itemize{
    \item \code{summary} gives a summary of the estimation properties
@@ -89,13 +89,13 @@ utility functions can be used
 library(survey)
 data(api)
 dstrat <- svydesign(id=~1, strata=~stype, weights=~pw, data=apistrat, fpc=~fpc)
-wsvymean(~api00, dstrat, LB = 0.05)
+svymean_winsorized(~api00, dstrat, LB = 0.05)
 # Domain estimates
-svyby(~api00, by = ~stype, design = dstrat, wsvymean, LB = 0.1)
+svyby(~api00, by = ~stype, design = dstrat, svymean_winsorized, LB = 0.1)
 }
 \seealso{
-\code{\link{msvymean}}, \code{\link{msvytotal}},
-\code{\link{tsvymean}}, \code{\link{tsvytotal}},
-\code{\link{weighted.mean.huber}}, \code{\link{weighted.total.huber}},
-\code{\link{weighted.mean.trimmed}}, \code{\link{weighted.total.trimmed}}
+\code{\link{svymean_huber}}, \code{\link{svytotal_huber}},
+\code{\link{svymean_trimmed}}, \code{\link{svytotal_trimmed}},
+\code{\link{weighted_mean_huber}}, \code{\link{weighted_total_huber}},
+\code{\link{weighted_mean_trimmed}}, \code{\link{weighted_total_trimmed}}
 }

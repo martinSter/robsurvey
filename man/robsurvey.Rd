@@ -11,14 +11,14 @@ statistics.
 }
 \section{robsurvey functions}{
 
-robust Horvitz-Thompson M-estimator of mean and total in \code{msvymean()}
-and \code{msvytotal()}, robust trimmed Horvitz-Thompson estimator of mean
-and total in \code{tsvymean()} and \code{tsvytotal()}, robust winsorized
-Horvitz-Thompson estimator of mean and total in \code{wsvymean()} and
-\code{wsvytotal()}, weighted median estimator in \code{weighted.median()},
-weighted quantile estimator in \code{weighted.quantile()}, weighted median
-absolute deviation in \code{weighted.mad()}, weighted mean and total
-estimators in \code{weighted.mean()} and \code{weighted.total()}.
+robust Horvitz-Thompson M-estimator of mean and total in \code{svymean_huber()}
+and \code{svytotal_huber()}, robust trimmed Horvitz-Thompson estimator of mean
+and total in \code{svymean_trimmed()} and \code{svytotal_trimmed()}, robust winsorized
+Horvitz-Thompson estimator of mean and total in \code{svymean_winsorized()} and
+\code{svytotal_winsorized()}, weighted median estimator in \code{weighted_median()},
+weighted quantile estimator in \code{weighted_quantile()}, weighted median
+absolute deviation in \code{weighted_mad()}, weighted mean and total
+estimators in \code{weighted_mean()} and \code{weighted_total()}.
 }
 
 \references{

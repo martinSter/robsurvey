@@ -2,13 +2,13 @@
 % Please edit documentation in R/robsurvey.R
 \name{wgtmeantotal}
 \alias{wgtmeantotal}
-\alias{weighted.total}
-\alias{weighted.mean}
+\alias{weighted_total}
+\alias{weighted_mean}
 \title{Weighted total and mean (Horvitz-Thompson and Hajek estimators)}
 \usage{
-weighted.total(x, w, na.rm = FALSE)
+weighted_total(x, w, na.rm = FALSE)
 
-weighted.mean(x, w, na.rm = FALSE)
+weighted_mean(x, w, na.rm = FALSE)
 }
 \arguments{
 \item{x}{a numeric vector}
@@ -32,7 +32,7 @@ TBD
 }
 \examples{
 x <- c(0.1, 0.35, 0.05, 0.1, 0.15, 0.05, 0.2)
-weighted.total(x, x)
+weighted_total(x, x)
 x <- c(0.1, 0.35, 0.05, 0.1, 0.15, 0.05, 0.2)
-weighted.mean(x, x)
+weighted_mean(x, x)
 }

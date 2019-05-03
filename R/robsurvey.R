@@ -4,14 +4,14 @@
 #' statistics.
 #'
 #' @section robsurvey functions:
-#' robust Horvitz-Thompson M-estimator of mean and total in \code{msvymean()}
-#' and \code{msvytotal()}, robust trimmed Horvitz-Thompson estimator of mean
-#' and total in \code{tsvymean()} and \code{tsvytotal()}, robust winsorized
-#' Horvitz-Thompson estimator of mean and total in \code{wsvymean()} and
-#' \code{wsvytotal()}, weighted median estimator in \code{weighted.median()},
-#' weighted quantile estimator in \code{weighted.quantile()}, weighted median
-#' absolute deviation in \code{weighted.mad()}, weighted mean and total
-#' estimators in \code{weighted.mean()} and \code{weighted.total()}.
+#' robust Horvitz-Thompson M-estimator of mean and total in \code{svymean_huber()}
+#' and \code{svytotal_huber()}, robust trimmed Horvitz-Thompson estimator of mean
+#' and total in \code{svymean_trimmed()} and \code{svytotal_trimmed()}, robust winsorized
+#' Horvitz-Thompson estimator of mean and total in \code{svymean_winsorized()} and
+#' \code{svytotal_winsorized()}, weighted median estimator in \code{weighted_median()},
+#' weighted quantile estimator in \code{weighted_quantile()}, weighted median
+#' absolute deviation in \code{weighted_mad()}, weighted mean and total
+#' estimators in \code{weighted_mean()} and \code{weighted_total()}.
 #'
 #' @references
 #' Hulliger, B. (1995). Outlier Robust Horvitz-Thompson Estimators.
@@ -29,9 +29,9 @@ NULL
 
 #' Weighted lower sample median
 #'
-#' \code{weighted.median} computes the weighted lower sample median
+#' \code{weighted_median} computes the weighted lower sample median
 #'
-#' See \code{\link{weighted.quantile}} for further details.
+#' See \code{\link{weighted_quantile}} for further details.
 #'
 #' @param x a numeric vector whose weighted sample median is wanted
 #' @param w a numeric vector of weights
@@ -40,12 +40,12 @@ NULL
 #' @return weighted sample median
 #' @examples
 #' x <- c(0.1, 0.35, 0.05, 0.1, 0.15, 0.05, 0.2)
-#' weighted.median(x, x)
-#' @seealso \code{\link{weighted.quantile}}
-#' @export weighted.median
+#' weighted_median(x, x)
+#' @seealso \code{\link{weighted_quantile}}
+#' @export weighted_median
 #' @importFrom stats na.omit
 #' @useDynLib robsurvey wquantile
-weighted.median <- function(x, w, na.rm = FALSE){
+weighted_median <- function(x, w, na.rm = FALSE){
    if (is.factor(x) || is.factor(w) || is.data.frame(x)){
       stop("Arguments 'x' and 'w' must be numeric vectors\n")
    }
@@ -69,7 +69,7 @@ weighted.median <- function(x, w, na.rm = FALSE){
 
 #' Weighted lower sample quantiles
 #'
-#' \code{weighted.quantile} computes the weighted lower sample quantile
+#' \code{weighted_quantile} computes the weighted lower sample quantile
 #'
 #' Weighted lower quantiles are computed using an algorithm with \eqn{O(n*log(n))}
 #' in worst-case time. There exist superior algorithms; see Cormen et al.
@@ -83,14 +83,14 @@ weighted.median <- function(x, w, na.rm = FALSE){
 #' @return Weighted sample quantiles
 #' @examples
 #' x <- c(0.1, 0.35, 0.05, 0.1, 0.15, 0.05, 0.2)
-#' weighted.quantile(x, x, probs = c(0.25, 0.5, 0.75))
+#' weighted_quantile(x, x, probs = c(0.25, 0.5, 0.75))
 #' @references Cormen,T.H., Leiserson, C.E., Rivest, R.L., and Stein, C. (2009):
 #'    Introduction to Algorithms, 3rd ed., Cambridge: MIT Press.
-#' @seealso \code{\link{weighted.median}}
-#' @export weighted.quantile
+#' @seealso \code{\link{weighted_median}}
+#' @export weighted_quantile
 #' @importFrom stats na.omit
 #' @useDynLib robsurvey wquantile
-weighted.quantile <- function(x, w, probs, na.rm = FALSE){
+weighted_quantile <- function(x, w, probs, na.rm = FALSE){
    if (is.factor(x) || is.factor(w) || is.data.frame(x)){
       stop("Arguments 'x' and 'w' must be numeric vectors\n")
    }
@@ -122,12 +122,12 @@ weighted.quantile <- function(x, w, probs, na.rm = FALSE){
 
 #' Weighted median absolute deviation from the median (MAD)
 #'
-#' \code{weighted.mad} computes weighted median absolute deviation from the
+#' \code{weighted_mad} computes weighted median absolute deviation from the
 #' weighted median
 #'
 #' The weighted MAD is computed as the (normalized) weighted median of the
 #' absolute deviation from the weighted median; the median is computed as the
-#' weighted lower sample median (see \code{\link{weighted.median}}); the MAD
+#' weighted lower sample median (see \code{\link{weighted_median}}); the MAD
 #' is normalized to be an unbiased estimate of scale at the Gaussian core model.
 #'
 #' @param x a numeric vector
@@ -138,12 +138,12 @@ weighted.quantile <- function(x, w, probs, na.rm = FALSE){
 #' @return Weighted median absolute deviation from the (weighted) median
 #' @examples
 #' x <- c(0.1, 0.35, 0.05, 0.1, 0.15, 0.05, 0.2)
-#' weighted.mad(x, x)
-#' @seealso \code{\link{weighted.median}}
-#' @export weighted.mad
+#' weighted_mad(x, x)
+#' @seealso \code{\link{weighted_median}}
+#' @export weighted_mad
 #' @importFrom stats na.omit
 #' @useDynLib robsurvey wmad
-weighted.mad <- function(x, w, na.rm = FALSE, constant = 1.4826){
+weighted_mad <- function(x, w, na.rm = FALSE, constant = 1.4826){
    if (is.factor(x) || is.factor(w) || is.data.frame(x)){
       stop("Arguments 'x' and 'w' must be numeric vectors\n")
    }
@@ -169,9 +169,9 @@ weighted.mad <- function(x, w, na.rm = FALSE, constant = 1.4826){
 #'
 #' This function is called internally.
 #'
-#' Tuning parameters for \code{\link{weighted.mean.huber}},
-#' \code{\link{weighted.total.huber}}, \code{\link{msvymean}},
-#' \code{\link{msvytotal}}.
+#' Tuning parameters for \code{\link{weighted_mean_huber}},
+#' \code{\link{weighted_total_huber}}, \code{\link{svymean_huber}},
+#' \code{\link{svytotal_huber}}.
 #'
 #' @param acc numeric tolerance, stoping rule in the iterative
 #' updating scheme (default: \code{1e-5})
@@ -179,8 +179,8 @@ weighted.mad <- function(x, w, na.rm = FALSE, constant = 1.4826){
 #' @param psi psi-function (\code{Huber} or \code{asymHuber})
 #' @param ... additional arguments
 #' @return List
-#' @export rht.control
-rht.control <- function(acc = 1e-5, maxit = 100, psi = "Huber", ...){
+#' @export rht_control
+rht_control <- function(acc = 1e-5, maxit = 100, psi = "Huber", ...){
    if(!(psi %in% c("Huber", "asymHuber"))) stop("Function 'psi' must be
       either 'Huber' or 'asymHuber'\n")
    psi0 <- switch(psi,
@@ -192,8 +192,8 @@ rht.control <- function(acc = 1e-5, maxit = 100, psi = "Huber", ...){
 
 
 #' @name wgtmeantotal
-#' @aliases weighted.total
-#' @aliases weighted.mean
+#' @aliases weighted_total
+#' @aliases weighted_mean
 #'
 #' @title Weighted total and mean (Horvitz-Thompson and Hajek estimators)
 #'
@@ -212,10 +212,10 @@ rht.control <- function(acc = 1e-5, maxit = 100, psi = "Huber", ...){
 #' @rdname wgtmeantotal
 #' @examples
 #' x <- c(0.1, 0.35, 0.05, 0.1, 0.15, 0.05, 0.2)
-#' weighted.total(x, x)
-#' @export weighted.total
+#' weighted_total(x, x)
+#' @export weighted_total
 #' @importFrom stats na.omit
-weighted.total <- function(x, w, na.rm = FALSE){
+weighted_total <- function(x, w, na.rm = FALSE){
    if (is.factor(x) || is.factor(w) || is.data.frame(x)){
       stop("Arguments 'x' and 'w' must be numeric vectors\n")
    }
@@ -235,10 +235,10 @@ weighted.total <- function(x, w, na.rm = FALSE){
 #' @rdname wgtmeantotal
 #' @examples
 #' x <- c(0.1, 0.35, 0.05, 0.1, 0.15, 0.05, 0.2)
-#' weighted.mean(x, x)
-#' @export weighted.mean
+#' weighted_mean(x, x)
+#' @export weighted_mean
 #' @importFrom stats na.omit
-weighted.mean <- function(x, w, na.rm = FALSE){
+weighted_mean <- function(x, w, na.rm = FALSE){
    if (is.factor(x) || is.factor(w) || is.data.frame(x)){
       stop("Arguments 'x' and 'w' must be numeric vectors\n")
    }
@@ -259,19 +259,19 @@ weighted.mean <- function(x, w, na.rm = FALSE){
 
 
 #' @name huberwgt
-#' @aliases weighted.mean.huber
-#' @aliases weighted.total.huber
-#' @aliases msvymean
-#' @aliases msvytotal
+#' @aliases weighted_mean_huber
+#' @aliases weighted_total_huber
+#' @aliases svymean_huber
+#' @aliases svytotal_huber
 #'
 #' @title Huber M-estimators of the weighted mean and weighted total
 #'
 #' @description Weighted Huber M-estimators of the mean and total are available in two forms:
 #' \itemize{
-#'    \item \strong{bare-bone} functions: \code{weighted.mean.huber} and
-#'	 \code{weighted.total.huber},
-#'    \item estimation \strong{methods}: \code{msvymean} and
-#'	 \code{msvytotal} (incl. variance estimation
+#'    \item \strong{bare-bone} functions: \code{weighted_mean_huber} and
+#'	 \code{weighted_total_huber},
+#'    \item estimation \strong{methods}: \code{svymean_huber} and
+#'	 \code{svytotal_huber} (incl. variance estimation
 #'	 based on the functionality of the \pkg{survey} package).
 #' }
 #'
@@ -300,7 +300,7 @@ weighted.mean <- function(x, w, na.rm = FALSE){
 #'    M-estimators of location are not scale invariant. The unkown scale is
 #'    estimated simultaneously with the estimate of location (mean or toal) as
 #'    the weighted median absolute deviation from the weighted median (MAD, see
-#'    \code{\link{weighted.mad}}).
+#'    \code{\link{weighted_mad}}).
 #'
 #'    }
 #'    \item{\emph{Variance}}{
@@ -311,7 +311,7 @@ weighted.mean <- function(x, w, na.rm = FALSE){
 #'    \item{\emph{Tuning}}{
 #'    Additional arguments can be passed (via \dots) to specify the control
 #'    parameters (e.g. number of iterations, psi-function, etc.); see
-#'    \code{\link{rht.control}} for details.
+#'    \code{\link{rht_control}} for details.
 #'    }
 #'    \item{\emph{Domain estimation}}{
 #'    Estimates for domains can be obtained using the \link[survey]{svyby}
@@ -320,7 +320,7 @@ weighted.mean <- function(x, w, na.rm = FALSE){
 #' }
 #'
 #' @section Utility functions:
-#' For the methods \code{msvymean} and \code{msvytotal}, the following
+#' For the methods \code{svymean_huber} and \code{svytotal_huber}, the following
 #' utility functions can be used
 #' \itemize{
 #'    \item \code{summary} gives a summary of the estimation properties
@@ -334,7 +334,7 @@ weighted.mean <- function(x, w, na.rm = FALSE){
 #'
 #' @param x a numeric vector (\code{weighted.[total/mean].huber} or
 #' \code{weighted.[total/mean].huber}); a formula object or variable
-#' name (\code{msvymean} or \code{msvytotal})
+#' name (\code{svymean_huber} or \code{svytotal_huber})
 #' @param w a numeric vector of weights
 #' @param design a \code{survey.design} object (see \link[survey]{svydesign}
 #' in \pkg{survey})
@@ -345,7 +345,7 @@ weighted.mean <- function(x, w, na.rm = FALSE){
 #' @param na.rm a logical value indicating whether \code{NA} values should
 #' be stripped before the computation proceeds.
 #' @param ... additional arguments passed to the control object
-#' (see \code{\link{rht.control}})
+#' (see \code{\link{rht_control}})
 #'
 #' @return \itemize{
 #'    \item An estimate (scalar) for \code{weighted.[total/mean].huber}
@@ -360,18 +360,18 @@ weighted.mean <- function(x, w, na.rm = FALSE){
 #' @references Hulliger, B. (1995). Outlier Robust Horvitz-Thompson Estimators,
 #' \emph{Survey Methodology} 21(1): 79-87.
 #'
-#' @seealso \code{\link{tsvymean}}, \code{\link{tsvytotal}},
-#' \code{\link{wsvymean}}, \code{\link{wsvytotal}},
-#' \code{\link{weighted.mean.trimmed}}, \code{\link{weighted.total.trimmed}}
-#' \code{\link{weighted.mean.winsorized}}, \code{\link{weighted.total.winsorized}}
+#' @seealso \code{\link{svymean_trimmed}}, \code{\link{svytotal_trimmed}},
+#' \code{\link{svymean_winsorized}}, \code{\link{svytotal_winsorized}},
+#' \code{\link{weighted_mean_trimmed}}, \code{\link{weighted_total_trimmed}}
+#' \code{\link{weighted_mean_winsorized}}, \code{\link{weighted_total_winsorized}}
 #'
 #' @rdname huberwgt
-#' @export weighted.mean.huber
+#' @export weighted_mean_huber
 #' @importFrom stats na.omit
 #' @useDynLib robsurvey rwlslm
-weighted.mean.huber <- function(x, w, k, type = "rht", info = FALSE,
+weighted_mean_huber <- function(x, w, k, type = "rht", info = FALSE,
    na.rm = FALSE, ...){
-   ctrl <- rht.control(...)
+   ctrl <- rht_control(...)
    if(!(type %in% c("rht", "rwm"))) stop("Argument 'type' must be either 'rht' or 'rwm'\n")
    n <- length(x)
    if (length(w) != n) stop("Vectors 'x' and 'w' are not of the same dimension\n")
@@ -418,10 +418,10 @@ weighted.mean.huber <- function(x, w, k, type = "rht", info = FALSE,
    return(res)
 }
 #' @rdname huberwgt
-#' @export weighted.total.huber
-weighted.total.huber <- function(x, w, k, type = "rht", info = FALSE,
+#' @export weighted_total_huber
+weighted_total_huber <- function(x, w, k, type = "rht", info = FALSE,
    na.rm = FALSE, ...){
-   res <- weighted.mean.huber(x, w, k, type, info, na.rm, ...)
+   res <- weighted_mean_huber(x, w, k, type, info, na.rm, ...)
    if(length(res) == 1){
       res <- res * sum(w)
    }else{
@@ -435,15 +435,15 @@ weighted.total.huber <- function(x, w, k, type = "rht", info = FALSE,
 #' library(survey)
 #' data(api)
 #' dstrat <- svydesign(id=~1, strata=~stype, weights=~pw, data=apistrat, fpc=~fpc)
-#' msvymean(~api00, dstrat, k = 2)
+#' svymean_huber(~api00, dstrat, k = 2)
 #' # Domain estimates
-#' svyby(~api00, by = ~stype, design = dstrat, msvymean, k = 1.34)
-#' @export msvymean
+#' svyby(~api00, by = ~stype, design = dstrat, svymean_huber, k = 1.34)
+#' @export svymean_huber
 #' @importFrom stats model.frame na.fail
 #' @importFrom stats weights
 #' @useDynLib robsurvey rwlslm
-msvymean <- function(x, design, k, type = "rht", ...){
-   ctrl <- rht.control(...)
+svymean_huber <- function(x, design, k, type = "rht", ...){
+   ctrl <- rht_control(...)
    if (class(x) == "formula"){
       mf <- model.frame(x, design$variables, na.action = na.fail)
       n <- nrow(mf)
@@ -457,7 +457,7 @@ msvymean <- function(x, design, k, type = "rht", ...){
 	 n <- length(y)
 	 if (any(is.na(y))) stop(paste0("Variable '", yname, "' must not contain NA's\n"))
       }else{
-	 stop("msvymean is not defined for object of class: ", class(x), "\n")
+	 stop("svymean_huber is not defined for object of class: ", class(x), "\n")
       }
    }
    w <- as.numeric(weights(design))
@@ -495,10 +495,10 @@ msvymean <- function(x, design, k, type = "rht", ...){
    res
 }
 #' @rdname huberwgt
-#' @export msvytotal
+#' @export svytotal_huber
 #' @importFrom stats weights
-msvytotal <- function(x, design, k, ...){
-   tmp <- msvymean(x, design, k, type = "rht", ...)
+svytotal_huber <- function(x, design, k, ...){
+   tmp <- svymean_huber(x, design, k, type = "rht", ...)
    tmp$characteristic <- "total"
    sumw <- sum(weights(design))
    tmp$estimate <- tmp$estimate * sumw
@@ -509,19 +509,19 @@ msvytotal <- function(x, design, k, ...){
 
 
 #' @name trimwgt
-#' @aliases weighted.mean.trimmed
-#' @aliases weighted.total.trimmed
-#' @aliases tsvymean
-#' @aliases tsvytotal
+#' @aliases weighted_mean_trimmed
+#' @aliases weighted_total_trimmed
+#' @aliases svymean_trimmed
+#' @aliases svytotal_trimmed
 #'
 #' @title Weighted trimmed mean and trimmed total
 #'
 #' @description Weighted trimmed estimators of the mean and total are available in two forms:
 #' \itemize{
-#'    \item \strong{bare-bone} functions: \code{weighted.mean.trimmed} and
-#'	 \code{weighted.total.trimmed},
-#'    \item estimation \strong{methods}: \code{tsvymean} and
-#'	 \code{tsvytotal} (incl. variance estimation
+#'    \item \strong{bare-bone} functions: \code{weighted_mean_trimmed} and
+#'	 \code{weighted_total_trimmed},
+#'    \item estimation \strong{methods}: \code{svymean_trimmed} and
+#'	 \code{svytotal_trimmed} (incl. variance estimation
 #'	 based on the functionality of the \pkg{survey} package).
 #' }
 #'
@@ -545,7 +545,7 @@ msvytotal <- function(x, design, k, ...){
 #' }
 #'
 #' @section Utility functions:
-#' For the methods \code{tsvymean} and \code{tsvytotal}, the following
+#' For the methods \code{svymean_trimmed} and \code{svytotal_trimmed}, the following
 #' utility functions can be used
 #' \itemize{
 #'    \item \code{summary} gives a summary of the estimation properties
@@ -557,8 +557,8 @@ msvytotal <- function(x, design, k, ...){
 #'
 #' @note \code{trimwgt} is a generic name for the functions documented.
 #'
-#' @param x numeric vector (\code{weighted.mean.trimmed} or \code{weighted.total.trimmed});
-#' a formula object or variable name (\code{tsvymean} or \code{tsvytotal})
+#' @param x numeric vector (\code{weighted_mean_trimmed} or \code{weighted_total_trimmed});
+#' a formula object or variable name (\code{svymean_trimmed} or \code{svytotal_trimmed})
 #' @param w numeric vector of weights
 #' @param design a \code{survey.design} object (see \link[survey]{svydesign} in \pkg{survey})
 #' @param LB lower bound of trimming, such that \eqn{0 \leq LB < UB \leq 1}
@@ -569,16 +569,16 @@ msvytotal <- function(x, design, k, ...){
 #'
 #' @return Estimate (scalar) or object of class \code{svystat.rob}
 #'
-#' @seealso \code{\link{msvymean}}, \code{\link{msvytotal}},
-#' \code{\link{wsvymean}}, \code{\link{wsvytotal}},
-#' \code{\link{weighted.mean.huber}}, \code{\link{weighted.total.huber}},
-#' \code{\link{weighted.mean.winsorized}}, \code{\link{weighted.total.winsorized}}
+#' @seealso \code{\link{svymean_huber}}, \code{\link{svytotal_huber}},
+#' \code{\link{svymean_winsorized}}, \code{\link{svytotal_winsorized}},
+#' \code{\link{weighted_mean_huber}}, \code{\link{weighted_total_huber}},
+#' \code{\link{weighted_mean_winsorized}}, \code{\link{weighted_total_winsorized}}
 #'
 #' @rdname trimwgt
-#' @export weighted.mean.trimmed
+#' @export weighted_mean_trimmed
 #' @importFrom stats na.omit
 #' @useDynLib robsurvey wmeantrimmed
-weighted.mean.trimmed <- function(x, w, LB = 0.05, UB = 1 - LB, na.rm = FALSE){
+weighted_mean_trimmed <- function(x, w, LB = 0.05, UB = 1 - LB, na.rm = FALSE){
    n <- length(x)
    if (length(w) != n) stop("Vectors 'x' and 'w' are not of the same dimension\n")
    if (is.factor(x) || is.factor(w) || is.data.frame(x)){
@@ -605,9 +605,9 @@ weighted.mean.trimmed <- function(x, w, LB = 0.05, UB = 1 - LB, na.rm = FALSE){
    return(tmp$mean)
 }
 #' @rdname trimwgt
-#' @export weighted.total.trimmed
-weighted.total.trimmed <- function(x, w, LB = 0.05, UB = 1 - LB, na.rm = FALSE){
-   res <- weighted.mean.trimmed(x, w, LB, UB, na.rm)
+#' @export weighted_total_trimmed
+weighted_total_trimmed <- function(x, w, LB = 0.05, UB = 1 - LB, na.rm = FALSE){
+   res <- weighted_mean_trimmed(x, w, LB, UB, na.rm)
    if(length(res) == 1){
       res <- res * sum(w)
    }else{
@@ -621,13 +621,13 @@ weighted.total.trimmed <- function(x, w, LB = 0.05, UB = 1 - LB, na.rm = FALSE){
 #' library(survey)
 #' data(api)
 #' dstrat <- svydesign(id=~1, strata=~stype, weights=~pw, data=apistrat, fpc=~fpc)
-#' tsvymean(~api00, dstrat, LB = 0.05)
+#' svymean_trimmed(~api00, dstrat, LB = 0.05)
 #' # Domain estimates
-#' svyby(~api00, by = ~stype, design = dstrat, tsvymean, LB = 0.1)
-#' @export tsvymean
+#' svyby(~api00, by = ~stype, design = dstrat, svymean_trimmed, LB = 0.1)
+#' @export svymean_trimmed
 #' @importFrom stats model.frame na.fail
 #' @importFrom stats weights
-tsvymean <- function(x, design, LB = 0.05, UB = 1 - LB, ...){
+svymean_trimmed <- function(x, design, LB = 0.05, UB = 1 - LB, ...){
    if (class(x) == "formula"){
       mf <- model.frame(x, design$variables, na.action = na.fail)
       n <- nrow(mf)
@@ -641,14 +641,14 @@ tsvymean <- function(x, design, LB = 0.05, UB = 1 - LB, ...){
 	 n <- length(y)
 	 if (any(is.na(y))) stop(paste0("Variable '", yname, "' must not contain NA's\n"))
       }else{
-	 stop("tsvymean is not defined for object of class: ", class(x), "\n")
+	 stop("svymean_trimmed is not defined for object of class: ", class(x), "\n")
       }
    }
    w <- as.numeric(weights(design))
-   est <- weighted.mean.trimmed(y, w, LB, UB)
+   est <- weighted_mean_trimmed(y, w, LB, UB)
    names(est) <- yname
    # compute influence function
-   quant <- weighted.quantile(y, w, probs = c(LB, UB))
+   quant <- weighted_quantile(y, w, probs = c(LB, UB))
    below <- floor(LB * n)
    above <- ceiling(UB * n)
    mat <- c(rep((1 - LB) * quant[1] - (1 - UB) * quant[2], below),
@@ -681,10 +681,10 @@ tsvymean <- function(x, design, LB = 0.05, UB = 1 - LB, ...){
    res
 }
 #' @rdname trimwgt
-#' @export tsvytotal
+#' @export svytotal_trimmed
 #' @importFrom stats weights
-tsvytotal <- function(x, design, LB = 0.05, UB = 1 - LB, ...){
-   tmp <- tsvymean(x, design, LB, UB)
+svytotal_trimmed <- function(x, design, LB = 0.05, UB = 1 - LB, ...){
+   tmp <- svymean_trimmed(x, design, LB, UB)
    tmp$characteristic <- "total"
    sumw <- sum(weights(design))
    tmp$estimate <- tmp$estimate * sumw
@@ -695,19 +695,19 @@ tsvytotal <- function(x, design, LB = 0.05, UB = 1 - LB, ...){
 
 
 #' @name winswgt
-#' @aliases weighted.mean.winsorized
-#' @aliases weighted.total.winsorized
-#' @aliases wsvymean
-#' @aliases wsvytotal
+#' @aliases weighted_mean_winsorized
+#' @aliases weighted_total_winsorized
+#' @aliases svymean_winsorized
+#' @aliases svytotal_winsorized
 #'
 #' @title Weighted winsorized mean and trimmed total
 #'
 #' @description Weighted winsorized estimators of the mean and total are available in two forms:
 #' \itemize{
-#'    \item \strong{bare-bone} functions: \code{weighted.mean.winsorized} and
-#'	 \code{weighted.total.winsorized},
-#'    \item estimation \strong{methods}: \code{wsvymean} and
-#'	 \code{wsvytotal} (incl. variance estimation
+#'    \item \strong{bare-bone} functions: \code{weighted_mean_winsorized} and
+#'	 \code{weighted_total_winsorized},
+#'    \item estimation \strong{methods}: \code{svymean_winsorized} and
+#'	 \code{svytotal_winsorized} (incl. variance estimation
 #'	 based on the functionality of the \pkg{survey} package).
 #' }
 #'
@@ -731,7 +731,7 @@ tsvytotal <- function(x, design, LB = 0.05, UB = 1 - LB, ...){
 #' }
 #'
 #' @section Utility functions:
-#' For the methods \code{wsvymean} and \code{wsvytotal}, the following
+#' For the methods \code{svymean_winsorized} and \code{svytotal_winsorized}, the following
 #' utility functions can be used
 #' \itemize{
 #'    \item \code{summary} gives a summary of the estimation properties
@@ -743,9 +743,9 @@ tsvytotal <- function(x, design, LB = 0.05, UB = 1 - LB, ...){
 #'
 #' @note \code{winswgt} is a generic name for the functions documented.
 #'
-#' @param x numeric vector (\code{weighted.mean.winsorized} or
-#' \code{weighted.total.winsorized}); a formula object or variable name
-#' (\code{wsvymean} or \code{wsvytotal})
+#' @param x numeric vector (\code{weighted_mean_winsorized} or
+#' \code{weighted_total_winsorized}); a formula object or variable name
+#' (\code{svymean_winsorized} or \code{svytotal_winsorized})
 #' @param w numeric vector of weights
 #' @param design a \code{survey.design} object (see \link[survey]{svydesign}
 #' in \pkg{survey})
@@ -757,16 +757,16 @@ tsvytotal <- function(x, design, LB = 0.05, UB = 1 - LB, ...){
 #'
 #' @return Estimate (scalar) or object of class \code{svystat.rob}
 #'
-#' @seealso \code{\link{msvymean}}, \code{\link{msvytotal}},
-#' \code{\link{tsvymean}}, \code{\link{tsvytotal}},
-#' \code{\link{weighted.mean.huber}}, \code{\link{weighted.total.huber}},
-#' \code{\link{weighted.mean.trimmed}}, \code{\link{weighted.total.trimmed}}
+#' @seealso \code{\link{svymean_huber}}, \code{\link{svytotal_huber}},
+#' \code{\link{svymean_trimmed}}, \code{\link{svytotal_trimmed}},
+#' \code{\link{weighted_mean_huber}}, \code{\link{weighted_total_huber}},
+#' \code{\link{weighted_mean_trimmed}}, \code{\link{weighted_total_trimmed}}
 #'
 #' @rdname winswgt
-#' @export weighted.mean.winsorized
+#' @export weighted_mean_winsorized
 #' @importFrom stats na.omit
 #' @useDynLib robsurvey wmeanwinsorized
-weighted.mean.winsorized <- function(x, w, LB = 0.05, UB = 1 - LB,
+weighted_mean_winsorized <- function(x, w, LB = 0.05, UB = 1 - LB,
    na.rm = FALSE){
    n <- length(x)
    if (length(w) != n) stop("Vectors 'x' and 'w' are not of the same dimension\n")
@@ -794,9 +794,9 @@ weighted.mean.winsorized <- function(x, w, LB = 0.05, UB = 1 - LB,
    return(tmp$mean)
 }
 #' @rdname winswgt
-#' @export weighted.total.winsorized
-weighted.total.winsorized <- function(x, w, LB = 0.05, UB = 1 - LB, na.rm = FALSE){
-   res <- weighted.mean.winsorized(x, w, LB, UB, na.rm)
+#' @export weighted_total_winsorized
+weighted_total_winsorized <- function(x, w, LB = 0.05, UB = 1 - LB, na.rm = FALSE){
+   res <- weighted_mean_winsorized(x, w, LB, UB, na.rm)
    if(length(res) == 1){
       res <- res * sum(w)
    }else{
@@ -810,13 +810,13 @@ weighted.total.winsorized <- function(x, w, LB = 0.05, UB = 1 - LB, na.rm = FALS
 #' library(survey)
 #' data(api)
 #' dstrat <- svydesign(id=~1, strata=~stype, weights=~pw, data=apistrat, fpc=~fpc)
-#' wsvymean(~api00, dstrat, LB = 0.05)
+#' svymean_winsorized(~api00, dstrat, LB = 0.05)
 #' # Domain estimates
-#' svyby(~api00, by = ~stype, design = dstrat, wsvymean, LB = 0.1)
-#' @export wsvymean
+#' svyby(~api00, by = ~stype, design = dstrat, svymean_winsorized, LB = 0.1)
+#' @export svymean_winsorized
 #' @importFrom stats model.frame na.fail
 #' @importFrom stats weights
-wsvymean <- function(x, design, LB = 0.05, UB = 1 - LB, ...){
+svymean_winsorized <- function(x, design, LB = 0.05, UB = 1 - LB, ...){
    if (class(x) == "formula"){
       mf <- model.frame(x, design$variables, na.action = na.fail)
       n <- nrow(mf)
@@ -830,15 +830,15 @@ wsvymean <- function(x, design, LB = 0.05, UB = 1 - LB, ...){
 	 n <- length(y)
 	 if (any(is.na(y))) stop(paste0("Variable '", yname, "' must not contain NA's\n"))
       }else{
-	 stop("wsvymean is not defined for object of class: ", class(x), "\n")
+	 stop("svymean_winsorized is not defined for object of class: ", class(x), "\n")
       }
    }
    w <- as.numeric(weights(design))
-   est <- weighted.mean.winsorized(y, w, LB, UB)
+   est <- weighted_mean_winsorized(y, w, LB, UB)
    names(est) <- yname
    # compute influence function
    # FIXME: variance => density estimate (now, it is trimmed mean variance)
-   quant <- weighted.quantile(y, w, probs = c(LB, UB))
+   quant <- weighted_quantile(y, w, probs = c(LB, UB))
    below <- floor(LB * n)
    above <- ceiling(UB * n)
    mat <- c(rep((1 - LB) * quant[1] - (1 - UB) * quant[2], below),
@@ -871,10 +871,10 @@ wsvymean <- function(x, design, LB = 0.05, UB = 1 - LB, ...){
    res
 }
 #' @rdname winswgt
-#' @export wsvytotal
+#' @export svytotal_winsorized
 #' @importFrom stats weights
-wsvytotal <- function(x, design, LB = 0.05, UB = 1 - LB, ...){
-   tmp <- wsvymean(x, design, LB, UB)
+svytotal_winsorized <- function(x, design, LB = 0.05, UB = 1 - LB, ...){
+   tmp <- svymean_winsorized(x, design, LB, UB)
    tmp$characteristic <- "total"
    sumw <- sum(weights(design))
    tmp$estimate <- tmp$estimate * sumw
@@ -886,10 +886,10 @@ wsvytotal <- function(x, design, LB = 0.05, UB = 1 - LB, ...){
 
 #' Weighted robust line fitting
 #'
-#' \code{weighted.line} fits a robust line and allows weights.
+#' \code{weighted_line} fits a robust line and allows weights.
 #'
 #' Uses different quantiles for splitting the sample than \code{line()}.
-#' Is based on \code{weighted.median()}.
+#' Is based on \code{weighted_median()}.
 #'
 #' @param x a numeric vector (explanatory variable)
 #' @param y a numeric vector (response variable)
@@ -900,12 +900,12 @@ wsvytotal <- function(x, design, LB = 0.05, UB = 1 - LB, ...){
 #' @return intercept and slope of the fitted line
 #' @examples
 #' data(cars)
-#' weighted.line(cars$speed, cars$dist)
-#' weighted.line(cars$speed, cars$dist, w=rep(1:10, each=5))
+#' weighted_line(cars$speed, cars$dist)
+#' weighted_line(cars$speed, cars$dist, w=rep(1:10, each=5))
 #' @seealso \code{\link[stats]{line}}
-#' @export weighted.line
+#' @export weighted_line
 #' @importFrom stats model.frame complete.cases
-weighted.line <- function(x, y=NULL, w, na.rm=FALSE, iter = 1){
+weighted_line <- function(x, y=NULL, w, na.rm=FALSE, iter = 1){
 
   # quantiles as implemented in line() but with weights
   # x and w sorted according to x
@@ -946,21 +946,21 @@ weighted.line <- function(x, y=NULL, w, na.rm=FALSE, iter = 1){
   groups <- (x <= lim1) * 1 + (x > lim1 & x < lim2) * 2 + (x >= lim2) * 3
 
   # Medians for x
-  wmedx <- c(weighted.median(x[groups==1], w[groups==1]),
-             weighted.median(x[groups==3], w[groups==3]))
+  wmedx <- c(weighted_median(x[groups==1], w[groups==1]),
+             weighted_median(x[groups==3], w[groups==3]))
 
   # polishing (affects only the slope)
   slope <- 0; r <- y; j <- 0
   while (j <= iter - 1) {
-    wmedr <- c(weighted.median(r[groups==1], w[groups==1]),
-               weighted.median(r[groups==3], w[groups==3]))
+    wmedr <- c(weighted_median(r[groups==1], w[groups==1]),
+               weighted_median(r[groups==3], w[groups==3]))
     slope <- slope + (wmedr[2] - wmedr[1]) / (wmedx[2] - wmedx[1])
     r <- y - slope * x
     j <- j + 1
   }
 
   # intercept and predicted values
-  intercept <- weighted.median(r, w)
+  intercept <- weighted_median(r, w)
   yhat <- intercept + slope * x
 
   # return
@@ -978,11 +978,11 @@ weighted.line <- function(x, y=NULL, w, na.rm=FALSE, iter = 1){
 #' variable is used as the estimator of the slope. Survey weights may be used.
 #' Missing values are neglected.
 #'
-#' Uses \code{weighted.median()}. The median of slopes (type="slopes")
+#' Uses \code{weighted_median()}. The median of slopes (type="slopes")
 #' uses \eqn{b1=M((y-M(y,w))/(x-M(x,w)), w)}. The median of crossproducts
 #' by median of squares (type="products") uses
 #' \eqn{b1=M((y-M(y,w))(x-M(x,w)), w )/ M((x-M(x,w )^2), w )}, where
-#' \eqn{M(x, w)} is shorthand for the function \code{weighted.median(x, w)}.
+#' \eqn{M(x, w)} is shorthand for the function \code{weighted_median(x, w)}.
 #' The function allows weights and missing values.
 #'
 #' @param x a numeric vector (explanatory variable)
@@ -995,35 +995,35 @@ weighted.line <- function(x, y=NULL, w, na.rm=FALSE, iter = 1){
 #' @examples
 #' x <- c(1, 2, 4, 5)
 #' y <- c(3, 2, 7, 4)
-#' weighted.line(y~x)
-#' weighted.median.line(y~x)
-#' weighted.median.line(y~x, type="prod")
+#' weighted_line(y~x)
+#' weighted_median_line(y~x)
+#' weighted_median_line(y~x, type="prod")
 #'
 #' data(cars)
-#' with(cars, weighted.median.line(dist ~ speed))
-#' with(cars, weighted.median.line(dist ~ speed, type="prod"))
+#' with(cars, weighted_median_line(dist ~ speed))
+#' with(cars, weighted_median_line(dist ~ speed, type="prod"))
 #'
 #' # weighted
 #' w <- c(rep(1,20), rep(2,20), rep(5, 10))
-#' with(cars, weighted.median.line(dist ~ speed, w=w))
-#' with(cars, weighted.median.line(dist ~ speed, w=w, type="prod"))
+#' with(cars, weighted_median_line(dist ~ speed, w=w))
+#' with(cars, weighted_median_line(dist ~ speed, w=w, type="prod"))
 #'
 #' # outlier in y
 #' cars$dist[49] <- 360
-#' with(cars, weighted.median.line(dist ~ speed))
-#' with(cars, weighted.median.line(dist ~ speed, type="prod"))
+#' with(cars, weighted_median_line(dist ~ speed))
+#' with(cars, weighted_median_line(dist ~ speed, type="prod"))
 #'
 #' # outlier in x
 #' data(cars)
 #' cars$speed[49] <- 72
-#' with(cars, weighted.median.line(dist ~ speed))
-#' with(cars, weighted.median.line(dist ~ speed, type="prod"))
-#' @seealso \code{\link[stats]{line}}, \code{\link{weighted.line}},
-#' \code{\link{weighted.median.ratio}}
-#' @export weighted.median.line
+#' with(cars, weighted_median_line(dist ~ speed))
+#' with(cars, weighted_median_line(dist ~ speed, type="prod"))
+#' @seealso \code{\link[stats]{line}}, \code{\link{weighted_line}},
+#' \code{\link{weighted_median_ratio}}
+#' @export weighted_median_line
 #' @importFrom stats complete.cases
 #' @importFrom grDevices xy.coords
-weighted.median.line <- function(x, y=NULL, w, type="slopes", na.rm=FALSE){
+weighted_median_line <- function(x, y=NULL, w, type="slopes", na.rm=FALSE){
 
   if (inherits(x, "formula")) {
     dat <- xy.coords(x)
@@ -1046,20 +1046,20 @@ weighted.median.line <- function(x, y=NULL, w, type="slopes", na.rm=FALSE){
   }
 
   # univariate medians
-  wmedx <- weighted.median(x, w)
-  wmedy <- weighted.median(y, w)
+  wmedx <- weighted_median(x, w)
+  wmedy <- weighted_median(y, w)
 
   # slope (remove NA created due to division by 0)
   slope <- switch(stype,
-                  weighted.median((y - wmedy) / (x - wmedx), w, na.rm=TRUE),
-                  weighted.median((y - wmedy) * (x - wmedx), w, na.rm=TRUE) / weighted.median((x - wmedx)^2, w, na.rm=TRUE)
+                  weighted_median((y - wmedy) / (x - wmedx), w, na.rm=TRUE),
+                  weighted_median((y - wmedy) * (x - wmedx), w, na.rm=TRUE) / weighted_median((x - wmedx)^2, w, na.rm=TRUE)
   )
 
   # residuals
   r <- y - slope * x
 
   # intercept
-  intercept <- weighted.median(r, w)
+  intercept <- weighted_median(r, w)
   yhat <- intercept + slope * x
 
   # return
@@ -1086,13 +1086,13 @@ weighted.median.line <- function(x, y=NULL, w, type="slopes", na.rm=FALSE){
 #' @examples
 #' x <- c(1,2,4,5)
 #' y <- c(1,0,5,2)
-#' weighted.median.ratio(y~x)
-#' @seealso \code{\link[stats]{line}}, \code{\link{weighted.line}},
-#' \code{\link{weighted.median.line}}
-#' @export weighted.median.ratio
+#' weighted_median_ratio(y~x)
+#' @seealso \code{\link[stats]{line}}, \code{\link{weighted_line}},
+#' \code{\link{weighted_median_line}}
+#' @export weighted_median_ratio
 #' @importFrom stats complete.cases
 #' @importFrom grDevices xy.coords
-weighted.median.ratio <- function(x, y=NULL, w, na.rm=FALSE){
+weighted_median_ratio <- function(x, y=NULL, w, na.rm=FALSE){
 
   if (inherits(x, "formula")) {
     dat <- xy.coords(x)
@@ -1112,7 +1112,7 @@ weighted.median.ratio <- function(x, y=NULL, w, na.rm=FALSE){
   }
 
   # ratio
-  ratio <- weighted.median(y / x, w, na.rm=TRUE)
+  ratio <- weighted_median(y / x, w, na.rm=TRUE)
 
   # fitted.varlues and residuals
   yhat <- ratio * x
