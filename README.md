@@ -10,20 +10,20 @@ Overview
 
 The following functions are provided in **robsurvey**:
 
--   `weighted.median()`
--   `weighted.quantile()`
--   `weighted.mad()`
--   `weighted.total()`
--   `weighted.mean()`
--   `msvymean()`
--   `msvytotal()`
--   `tsvymean()`
--   `tsvytotal()`
--   `wsvymean()`
--   `wsvytotal()`
--   `weighted.line()`
--   `weighted.median.line()`
--   `weighted.median.ratio()`
+-   `weighted_median()`
+-   `weighted_quantile()`
+-   `weighted_mad()`
+-   `weighted_total()`
+-   `weighted_mean()`
+-   `svymean_huber()`
+-   `svytotal_huber()`
+-   `svymean_trimmed()`
+-   `svytotal_trimmed()`
+-   `svymean_winsorized()`
+-   `svytotal_winsorized()`
+-   `weighted_line()`
+-   `weighted_median_line()`
+-   `weighted_median_ratio()`
 
 Installation
 ------------
@@ -41,23 +41,9 @@ Example
 In the following example, we showcase a typical use of the package **robsurvey**. The data we use are from the package **survey** and describe the student performance in California schools. We will show different ways of how to compute a robust mean value for the Academic Performance Index (API) in 2000. The variable is denoted as `api00`. The following code chunk simply loads the data and defines the survey design (based on the **survey** package).
 
 ``` r
-## load packages
+# load and attach packages
 library(robsurvey)
-#> 
-#> Attaching package: 'robsurvey'
-#> The following object is masked from 'package:stats':
-#> 
-#>     weighted.mean
 library(survey)
-#> Warning: package 'survey' was built under R version 3.5.3
-#> Loading required package: grid
-#> Loading required package: Matrix
-#> Loading required package: survival
-#> 
-#> Attaching package: 'survey'
-#> The following object is masked from 'package:graphics':
-#> 
-#>     dotchart
 
 # load the api dataset
 data(api)
@@ -71,26 +57,26 @@ In the following code chunk we first compute the robust Horvitz-Thompson M-estim
 
 ``` r
 # compute the robust Horvitz-Thompson M-estimator of the mean
-msvymean(~api00, dstrat, k = 2)
+svymean_huber(~api00, dstrat, k = 2)
 #>          mean    SE
 #> api00 662.907 8.926
 
 # compute the robust trimmed Horvitz-Thompson mean
-tsvymean(~api00, dstrat, k = 2)
+svymean_trimmed(~api00, dstrat, k = 2)
 #>          mean     SE
 #> api00 655.362 11.568
 
 # compute the robust winsorized Horvitz-Thompson mean
-wsvymean(~api00, dstrat, k = 2)
+svymean_winsorized(~api00, dstrat, k = 2)
 #>          mean     SE
 #> api00 640.599 11.568
 ```
 
-It is also possible to use `msvymean()` in combination with `svyby()` from the **survey** package. The variable `stype` denotes the school level: elementary, middle, and high school.
+It is also possible to use `svymean_huber()` in combination with `svyby()` from the **survey** package. The variable `stype` denotes the school level: elementary, middle, and high school.
 
 ``` r
 # Domain estimates
-svyby(~api00, by = ~stype, design = dstrat, msvymean, k = 1.34)
+svyby(~api00, by = ~stype, design = dstrat, svymean_huber, k = 1.34)
 #>   stype    api00       se
 #> E     E 675.8203  9.44767
 #> H     H 629.1850 10.88119
