@@ -53,7 +53,7 @@ dstrat <- svydesign(id = ~1, strata = ~stype, weights = ~pw,
                     data = apistrat, fpc = ~fpc)
 ```
 
-In the following code chunk we first compute the robust Horvitz-Thompson M-estimator for the mean. In addition, we compute the trimmed and winsorized (robust) Horvitz-Thompson mean. Note how the estimates and the corresponding standard errors vary.
+In the following code chunk we first compute the robust Horvitz-Thompson M-estimator for the mean. In addition, we compute the trimmed and winsorized (robust) Horvitz-Thompson mean. Note how the estimates and the corresponding standard errors vary. The scale estimate used in the Huber-type robust M-estimator is the MAD, which is rescaled to be consistent at the normal distribution, i.e. multiplied by the constant 1.4826. The default tuning constant of the Huber-type Horvitz-Thompson M-estimator is *k* = 1.5.
 
 ``` r
 # compute the robust Horvitz-Thompson M-estimator of the mean
@@ -81,4 +81,12 @@ svyby(~api00, by = ~stype, design = dstrat, svymean_huber, k = 1.34)
 #> E     E 675.8203  9.44767
 #> H     H 629.1850 10.88119
 #> M     M 635.1765 12.63996
+```
+
+For simulations and as intermediate results the above functions can also be used without the **survey** package. They deliver only the bare estimate.
+
+``` r
+# bare-bone function to compute robust Horvitz-Thompson M-estimator of the mean
+weighted_mean_huber(apistrat$api00, weights(dstrat), k = 2)
+#> [1] 662.9068
 ```
