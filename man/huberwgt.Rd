@@ -8,15 +8,15 @@
 \alias{svytotal_huber}
 \title{Huber M-estimators of the weighted mean and weighted total}
 \usage{
-weighted_mean_huber(x, w, k, type = "rht", info = FALSE,
+weighted_mean_huber(x, w, k = 1.5, type = "rht", info = FALSE,
   na.rm = FALSE, ...)
 
-weighted_total_huber(x, w, k, type = "rht", info = FALSE,
+weighted_total_huber(x, w, k = 1.5, type = "rht", info = FALSE,
   na.rm = FALSE, ...)
 
-svymean_huber(x, design, k, type = "rht", ...)
+svymean_huber(x, design, k = 1.5, type = "rht", ...)
 
-svytotal_huber(x, design, k, ...)
+svytotal_huber(x, design, k = 1.5, ...)
 }
 \arguments{
 \item{x}{a numeric vector (\code{weighted.[total/mean].huber} or

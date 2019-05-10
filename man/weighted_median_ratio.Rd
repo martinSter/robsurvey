@@ -29,7 +29,7 @@ TBD
 \examples{
 x <- c(1,2,4,5)
 y <- c(1,0,5,2)
-weighted_median_ratio(y~x)
+weighted_median_ratio(y~x, w = rep(1, length(y)))
 }
 \seealso{
 \code{\link[stats]{line}}, \code{\link{weighted_line}},

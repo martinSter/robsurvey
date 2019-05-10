@@ -30,7 +30,7 @@ Is based on \code{weighted_median()}.
 }
 \examples{
 data(cars)
-weighted_line(cars$speed, cars$dist)
+weighted_line(cars$speed, cars$dist, w=rep(1, length(cars$speed)))
 weighted_line(cars$speed, cars$dist, w=rep(1:10, each=5))
 }
 \seealso{

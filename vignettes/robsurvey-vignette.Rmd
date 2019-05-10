@@ -1,0 +1,264 @@
+---
+title: "Introduction to robsurvey"
+author: "Beat Hulliger and Tobias Schoch"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+references:
+- id: Hulliger1995
+  title: Outlier Robust Horvitz-Thompson Estimators
+  author:
+  - family: Hulliger
+    given: Beat
+  container-title: Survey Methodology
+  volume: 21
+  issue:
+  page: 79-87
+  type: article-journal
+  issued:
+    year: 1995
+- id: Hulliger1999
+  title: Simple and Robust Estimators for Sampling
+  author:
+  - family: Hulliger
+    given: Beat
+  container-title: ASA Proceedings of the Section on Survey Research Methods
+  volume: 21
+  issue:
+  publisher: American Statistical Association
+  page: 54-63
+  type: article-journal
+  issued:
+    year: 1999
+- id: Hulliger2011
+  title: R Programmes for Robust Procedures
+  author:
+  - family: Hulliger
+    given: Beat
+  - family: Alfons
+    given: Andreas
+  - family: Filzmoser
+    given: Peter
+  - family: Meraner
+    given: Angelika
+  - family: Schoch
+    given: Tobias
+  - family: Templ
+    given: Matthias
+  container-title:
+  volume:
+  URL: 'http://ameli.surveystatistics.net'
+  issue:
+  publisher: FP7-SSH-2007-217322 AMELI
+  page:
+  type: article-journal
+  issued:
+    year: 2011
+- id: AMELI-D10-3
+  title: R Packages plus Manual
+  author:
+  - family: Templ
+    given: Matthias
+  - family: Alfons
+    given: Andreas
+  - family: Filzmoser
+    given: Peter
+  - family: Graf
+    given: Monique
+  - family: Holzer
+    given: Josef
+  - family: Hulliger
+    given: Beat
+  - family: Kowarik
+    given: Alexander
+  - family: Kraft
+    given: Stefan
+  - family: Lehtonen
+    given: Risto
+  - family: Nedyalkova
+    given: Desislava
+  - family: Schoch
+    given: Tobias
+  - family: Veijanen
+    given: Ari
+  - family: Zins
+    given: Stefan
+  container-title:
+  volume:
+  URL: 'http://ameli.surveystatistics.net'
+  issue:
+  publisher: FP7-SSH-2007-217322 AMELI
+  page:
+  type: article-journal
+  issued:
+    year: 2011
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## Introduction
+
+The package **robsurvey** provides several functions to compute robust survey statistics. The package supports the computations of robust means, totals, and ratios. Available methods are Huber M-estimators, trimming, and winsorization.
+
+All methods may be used with `na.rm = TRUE` in order to remove missing values before the computation starts.
+
+Most of the methods provided in the package are described in [@Hulliger1995, @Hulliger1999, @Hulliger2011, @AMELI-D10-3].
+
+**robsurvey** complements the popular [survey](https://cran.r-project.org/web/packages/survey/index.html) package.
+
+Multivariate outlier detection and imputation methods can be found in the R-package [modi](https://cran.r-project.org/web/packages/modi/index.html). 
+
+## Overview
+
+The main functions provided in **robsurvey** are:
+
+* `svymean_huber()`
+* `svytotal_huber()`
+* `svymean_trimmed()`
+* `svytotal_trimmed()`
+* `svymean_winsorized()`
+* `svytotal_winsorized()`
+* `weighted_line()`
+* `weighted_median_line()`
+* `weighted_median_ratio()`
+
+## Robust survey statistics
+
+In the following example, we showcase a typical use of the package **robsurvey**. The data we use are from the package **survey** and describe the student performance in Californian schools. We will show different ways of how to compute a robust mean value for the Academic Performance Index (API) in 2000. The variable is denoted as `api00`. The following code chunk simply loads the data.
+
+```{r, warning = FALSE, message = FALSE}
+## load packages
+library(robsurvey)
+library(survey)
+
+# load the api dataset
+data(api)
+```
+
+The variables we are going to use are shown in the following table. `sname` denotes the name of the school and `stype` the type of school (E: elementary school, M: middle school, H: high school). As mentioned above, `api00` denotes the Academic Performance Index of the school. `pw` is the weight of the observation and `fpc` is the population size that is used for the finite population correction. Note that the variable `fpc` is the same for all schools of the same type (E, M, H).
+
+```{r, echo=FALSE, results='asis'}
+knitr::kable(head(apistrat[ ,c("sname","stype","api00","pw","fpc")]))
+```
+
+Based on the function `svydesign` from the **survey** package, we can now define a survey design for these data. With the argument `strata` we can stratify the dataset into the three types of schools.
+
+```{r}
+# define survey design
+dstrat <- svydesign(id = ~1, strata = ~stype, weights = ~pw, 
+                    data = apistrat, fpc = ~fpc)
+```
+
+Having defined the survey design, it is now very easy to compute robust survey statistics with the functions provided in **robsurvey**. In the following code chunk, we first compute the robust Horvitz-Thompson M-estimator for the mean API. In addition, we compute the trimmed and winsorized (robust) Horvitz-Thompson mean. Note how the estimates and the corresponding standard errors vary. The scale estimate used in the Huber-type robust M-estimator is the median absolute deviation (MAD), which is rescaled to be consistent at the normal distribution, i.e. it is multiplied by the constant 1.4826. The default tuning constant of the Huber-type Horvitz-Thompson M-estimator is `k = 1.5`. However, in this example we manually set it to `k = 2`.
+
+```{r}
+# compute the robust Horvitz-Thompson M-estimator of the mean
+svymean_huber(~api00, dstrat, k = 2)
+
+# compute the robust trimmed Horvitz-Thompson mean
+svymean_trimmed(~api00, dstrat, k = 2)
+
+# compute the robust winsorized Horvitz-Thompson mean
+svymean_winsorized(~api00, dstrat, k = 2)
+```
+
+It is also possible to use `svymean_huber()` (or analogously, `svymean_trimmed()` or `svymean_winsorized()`) in combination with `svyby()` from the **survey** package in order to compute the robust sample means for all three groups (or strata).
+
+```{r}
+# Domain estimates
+svyby(~api00, by = ~stype, design = dstrat, svymean_huber, k = 2)
+```
+
+Instead of the mean, you may be interested in computing the robust total:
+
+```{r}
+# compute the robust HTE for the total
+svytotal_huber(~api00, dstrat, k = 2)
+
+# compute the robust trimmed total
+svytotal_trimmed(~api00, dstrat, k = 2)
+
+# compute the robust winsorized total
+svytotal_winsorized(~api00, dstrat, k = 2)
+```
+
+For simulations and as intermediate results, the above functions can also be used without the **survey** package. They then only deliver the bare estimate. We extract the weights from the survey design with `weights(dstrat)`. Note that the estimate is identical to `svymean_huber(~api00, dstrat, k = 2)`.
+
+```{r}
+# bare-bone function to compute robust Horvitz-Thompson M-estimator of the mean
+weighted_mean_huber(apistrat$api00, weights(dstrat), k = 2)
+```
+
+## Robust simple linear regression and ratio estimator
+
+A weighted version of the resistant line function of base R (`line()`) is provided as `weighted_line()`. 
+
+```{r plot1, fig.width=6, fig.height=5}
+# weighted resistant line
+out <- weighted_line(apistrat$api00 ~ apistrat$api99, w = weights(dstrat))
+
+# what are coefficients?
+coef(out)
+
+# plot data
+plot(apistrat$api00 ~ apistrat$api99)
+abline(out, col = "green")
+```
+
+Two median-based simple regression estimators are provided (`weighted_median_line()`). One which takes the weighted median of the centered ratios as the estimator for the slope (`type = "slopes"`) and one which replaces all sums in the least squares estimator formula for the slope by weighted medians (`type = "products"`). 
+
+The weighted median of ratios estimators are
+
+$$b_{1, slopes}=M\left(\frac{y-M(y, w)}{x-M(x, w)}, w\right) $$ and 
+$$b_{0, slopes}=M(y-b_{1, slopes}\cdot x, w), $$ where $M(x, w)$ is a weighted median of a vector $x$ weighted with $w$. 
+
+The weighted median of products estimators are
+
+$$ b_{1, products}=\frac{M((y-M(y, w))(x-M(x, w)), w)}{M((x-M(x, w))^2, w)}$$ and 
+$$b_{0, products}=M(y-b_{1, products}\cdot x, w).$$
+
+```{r plot2, fig.width=6, fig.height=5}
+# weighted median line based on slopes
+out_s <- weighted_median_line(apistrat$api00 ~ apistrat$api99, w = weights(dstrat))
+
+# weighted median line based on products
+out_p <- weighted_median_line(apistrat$api00 ~ apistrat$api99, w = weights(dstrat), type = "products")
+
+# what are coefficients?
+coef(out_s)
+coef(out_p)
+
+# plot data
+plot(apistrat$api00 ~ apistrat$api99)
+abline(out_s, col = "blue")
+abline(out_p, col = "red")
+```
+
+A weighted regression through the origin based on medians is provided in `weighted_median_ratio()`. These functions may be useful for detecting bivariate outliers, as estimators on their own or as starting values for iterated M-estimators.
+
+## Utility functions 
+
+The **robsurvey** package provides several functions which may be used outside the package, in particular `weighted_median()` and `weighted_quantile()`. The full list of utility functions is as follows:
+
+* `weighted_median()` 
+* `weighted_quantile()`
+* `weighted_mad()`
+* `weighted_total()`
+* `weighted_mean()`
+
+The weighted median calculates a median from the weighted empirical cumulative distribution function. Undefiniteness is solved by taking the mean of the low and the high median. Weighted quantiles use the lower quantile in case of undefiniteness.
+
+```{r}
+# compute weighted median for api00
+weighted_median(apistrat$api00, weights(dstrat))
+```
+
+## References

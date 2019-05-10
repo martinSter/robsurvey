@@ -2,7 +2,7 @@
 % Please edit documentation in R/robsurvey.R
 \name{weighted_median}
 \alias{weighted_median}
-\title{Weighted lower sample median}
+\title{Weighted median with weighted interpolation}
 \usage{
 weighted_median(x, w, na.rm = FALSE)
 }
@@ -18,10 +18,12 @@ stripped before the computation proceeds.}
 weighted sample median
 }
 \description{
-\code{weighted_median} computes the weighted lower sample median
+\code{weighted.median} computes a weighted median where the
+exact location corresponds exactly to a cumulative weight of 0.5.
+This yields a symmetric median.
 }
 \details{
-See \code{\link{weighted_quantile}} for further details.
+TBD
 }
 \examples{
 x <- c(0.1, 0.35, 0.05, 0.1, 0.15, 0.05, 0.2)

@@ -5,3 +5,8 @@ test_that("Function outputs correct result for example", {
   x <- c(0.1, 0.35, 0.05, 0.1, 0.15, 0.05, 0.2)
   expect_equal(weighted_mean_huber(x, x, k = 1.34), 0.1881523, tolerance=1e-05)
 })
+
+test_that("Function works with default k", {
+  x <- c(0.1, 0.35, 0.05, 0.1, 0.15, 0.05, 0.2)
+  expect_equal(weighted_mean_huber(x, x), 0.1892942, tolerance=1e-05)
+})

@@ -27,11 +27,13 @@ NULL
 
 
 
-#' Weighted lower sample median
+#' Weighted median with weighted interpolation
 #'
-#' \code{weighted_median} computes the weighted lower sample median
+#' \code{weighted.median} computes a weighted median where the
+#' exact location corresponds exactly to a cumulative weight of 0.5.
+#' This yields a symmetric median.
 #'
-#' See \code{\link{weighted_quantile}} for further details.
+#' TBD
 #'
 #' @param x a numeric vector whose weighted sample median is wanted
 #' @param w a numeric vector of weights
@@ -43,26 +45,34 @@ NULL
 #' weighted_median(x, x)
 #' @seealso \code{\link{weighted_quantile}}
 #' @export weighted_median
-#' @importFrom stats na.omit
-#' @useDynLib robsurvey wquantile
-weighted_median <- function(x, w, na.rm = FALSE){
-   if (is.factor(x) || is.factor(w) || is.data.frame(x)){
-      stop("Arguments 'x' and 'w' must be numeric vectors\n")
-   }
-   n <- length(x); nw <- length(w)
-   if (nw != n) stop("Vectors 'x' and 'w' are not of the same dimension\n")
-   if (n == 0){
-      return(NA)
-   }
-   dat <- cbind(x, w)
-   if (na.rm){
-      dat <- na.omit(dat)
-   }else if(any(is.na(dat))) {
-      return(NA)
-   }
-   tmp <- .C("wquantile", x = as.double(dat[, 1]), w = as.double(dat[, 2]),
-             probs = as.double(0.5), q = as.double(numeric(1)), n = as.integer(n))
-   return(tmp$q)
+weighted_median <- function(x, w, na.rm=FALSE) {
+  # checking and dealing with missingness
+  if(missing(w)) stop('Argument w (weights) is missing, with no default.')
+  sel <- is.finite(x) & is.finite(w)
+  if (sum(sel) < length(x) & na.rm==FALSE) {
+    return("There are missing values in x or w. \n")
+  }
+  x <- x[sel]
+  w <- w[sel]
+
+  ord <- order(x)
+  w <- w[ord]
+  x <- x[ord]
+
+  n <- length(x)
+  cumw <- cumsum(w) / sum(w)
+
+  # warning if one of the weights accounts for half of total weight
+  if(max(w)/sum(w) > 0.5) {
+    cat("\n Dominance of one observation!\n")
+  }
+
+  lower.k <- max(which(cumw <= 0.5))
+  upper.k <- min(which(cumw > 0.5))
+
+  if (cumw[lower.k] < 0.5) return(x[upper.k])
+  else return(0.5 * x[lower.k] + 0.5 * x[upper.k])
+
 }
 
 
@@ -91,6 +101,7 @@ weighted_median <- function(x, w, na.rm = FALSE){
 #' @importFrom stats na.omit
 #' @useDynLib robsurvey wquantile
 weighted_quantile <- function(x, w, probs, na.rm = FALSE){
+   if(missing(w)) stop('Argument w (weights) is missing, with no default.')
    if (is.factor(x) || is.factor(w) || is.data.frame(x)){
       stop("Arguments 'x' and 'w' must be numeric vectors\n")
    }
@@ -144,6 +155,7 @@ weighted_quantile <- function(x, w, probs, na.rm = FALSE){
 #' @importFrom stats na.omit
 #' @useDynLib robsurvey wmad
 weighted_mad <- function(x, w, na.rm = FALSE, constant = 1.4826){
+   if(missing(w)) stop('Argument w (weights) is missing, with no default.')
    if (is.factor(x) || is.factor(w) || is.data.frame(x)){
       stop("Arguments 'x' and 'w' must be numeric vectors\n")
    }
@@ -216,6 +228,7 @@ rht_control <- function(acc = 1e-5, maxit = 100, psi = "Huber", ...){
 #' @export weighted_total
 #' @importFrom stats na.omit
 weighted_total <- function(x, w, na.rm = FALSE){
+   if(missing(w)) stop('Argument w (weights) is missing, with no default.')
    if (is.factor(x) || is.factor(w) || is.data.frame(x)){
       stop("Arguments 'x' and 'w' must be numeric vectors\n")
    }
@@ -239,6 +252,7 @@ weighted_total <- function(x, w, na.rm = FALSE){
 #' @export weighted_mean
 #' @importFrom stats na.omit
 weighted_mean <- function(x, w, na.rm = FALSE){
+   if(missing(w)) stop('Argument w (weights) is missing, with no default.')
    if (is.factor(x) || is.factor(w) || is.data.frame(x)){
       stop("Arguments 'x' and 'w' must be numeric vectors\n")
    }
@@ -369,8 +383,9 @@ weighted_mean <- function(x, w, na.rm = FALSE){
 #' @export weighted_mean_huber
 #' @importFrom stats na.omit
 #' @useDynLib robsurvey rwlslm
-weighted_mean_huber <- function(x, w, k, type = "rht", info = FALSE,
+weighted_mean_huber <- function(x, w, k = 1.5, type = "rht", info = FALSE,
    na.rm = FALSE, ...){
+   if(missing(w)) stop('Argument w (weights) is missing, with no default.')
    ctrl <- rht_control(...)
    if(!(type %in% c("rht", "rwm"))) stop("Argument 'type' must be either 'rht' or 'rwm'\n")
    n <- length(x)
@@ -419,8 +434,9 @@ weighted_mean_huber <- function(x, w, k, type = "rht", info = FALSE,
 }
 #' @rdname huberwgt
 #' @export weighted_total_huber
-weighted_total_huber <- function(x, w, k, type = "rht", info = FALSE,
+weighted_total_huber <- function(x, w, k = 1.5, type = "rht", info = FALSE,
    na.rm = FALSE, ...){
+   if(missing(w)) stop('Argument w (weights) is missing, with no default.')
    res <- weighted_mean_huber(x, w, k, type, info, na.rm, ...)
    if(length(res) == 1){
       res <- res * sum(w)
@@ -442,7 +458,7 @@ weighted_total_huber <- function(x, w, k, type = "rht", info = FALSE,
 #' @importFrom stats model.frame na.fail
 #' @importFrom stats weights
 #' @useDynLib robsurvey rwlslm
-svymean_huber <- function(x, design, k, type = "rht", ...){
+svymean_huber <- function(x, design, k = 1.5, type = "rht", ...){
    ctrl <- rht_control(...)
    if (class(x) == "formula"){
       mf <- model.frame(x, design$variables, na.action = na.fail)
@@ -497,7 +513,7 @@ svymean_huber <- function(x, design, k, type = "rht", ...){
 #' @rdname huberwgt
 #' @export svytotal_huber
 #' @importFrom stats weights
-svytotal_huber <- function(x, design, k, ...){
+svytotal_huber <- function(x, design, k = 1.5, ...){
    tmp <- svymean_huber(x, design, k, type = "rht", ...)
    tmp$characteristic <- "total"
    sumw <- sum(weights(design))
@@ -579,6 +595,7 @@ svytotal_huber <- function(x, design, k, ...){
 #' @importFrom stats na.omit
 #' @useDynLib robsurvey wmeantrimmed
 weighted_mean_trimmed <- function(x, w, LB = 0.05, UB = 1 - LB, na.rm = FALSE){
+   if(missing(w)) stop('Argument w (weights) is missing, with no default.')
    n <- length(x)
    if (length(w) != n) stop("Vectors 'x' and 'w' are not of the same dimension\n")
    if (is.factor(x) || is.factor(w) || is.data.frame(x)){
@@ -607,6 +624,7 @@ weighted_mean_trimmed <- function(x, w, LB = 0.05, UB = 1 - LB, na.rm = FALSE){
 #' @rdname trimwgt
 #' @export weighted_total_trimmed
 weighted_total_trimmed <- function(x, w, LB = 0.05, UB = 1 - LB, na.rm = FALSE){
+   if(missing(w)) stop('Argument w (weights) is missing, with no default.')
    res <- weighted_mean_trimmed(x, w, LB, UB, na.rm)
    if(length(res) == 1){
       res <- res * sum(w)
@@ -768,6 +786,7 @@ svytotal_trimmed <- function(x, design, LB = 0.05, UB = 1 - LB, ...){
 #' @useDynLib robsurvey wmeanwinsorized
 weighted_mean_winsorized <- function(x, w, LB = 0.05, UB = 1 - LB,
    na.rm = FALSE){
+   if(missing(w)) stop('Argument w (weights) is missing, with no default.')
    n <- length(x)
    if (length(w) != n) stop("Vectors 'x' and 'w' are not of the same dimension\n")
    if (is.factor(x) || is.factor(w) || is.data.frame(x)){
@@ -796,6 +815,7 @@ weighted_mean_winsorized <- function(x, w, LB = 0.05, UB = 1 - LB,
 #' @rdname winswgt
 #' @export weighted_total_winsorized
 weighted_total_winsorized <- function(x, w, LB = 0.05, UB = 1 - LB, na.rm = FALSE){
+   if(missing(w)) stop('Argument w (weights) is missing, with no default.')
    res <- weighted_mean_winsorized(x, w, LB, UB, na.rm)
    if(length(res) == 1){
       res <- res * sum(w)
@@ -900,12 +920,14 @@ svytotal_winsorized <- function(x, design, LB = 0.05, UB = 1 - LB, ...){
 #' @return intercept and slope of the fitted line
 #' @examples
 #' data(cars)
-#' weighted_line(cars$speed, cars$dist)
+#' weighted_line(cars$speed, cars$dist, w=rep(1, length(cars$speed)))
 #' weighted_line(cars$speed, cars$dist, w=rep(1:10, each=5))
 #' @seealso \code{\link[stats]{line}}
 #' @export weighted_line
 #' @importFrom stats model.frame complete.cases
 weighted_line <- function(x, y=NULL, w, na.rm=FALSE, iter = 1){
+
+  if(missing(w)) stop('Argument w (weights) is missing, with no default.')
 
   # quantiles as implemented in line() but with weights
   # x and w sorted according to x
@@ -923,7 +945,6 @@ weighted_line <- function(x, y=NULL, w, na.rm=FALSE, iter = 1){
     x <- mf[, -1]
   }
   if (NCOL(x) > 1) return("x contains more than 1 explanatory variables.")
-  if (missing(w)) w <- rep(1, length(x))
   dat <- data.frame(x, y, w)
   ok <- complete.cases(dat$x, dat$y, dat$w)
   n <- sum(ok)
@@ -995,13 +1016,13 @@ weighted_line <- function(x, y=NULL, w, na.rm=FALSE, iter = 1){
 #' @examples
 #' x <- c(1, 2, 4, 5)
 #' y <- c(3, 2, 7, 4)
-#' weighted_line(y~x)
-#' weighted_median_line(y~x)
-#' weighted_median_line(y~x, type="prod")
+#' weighted_line(y~x, w=rep(1, length(x)))
+#' weighted_median_line(y~x, w=rep(1, length(x)))
+#' weighted_median_line(y~x, w=rep(1, length(x)), type="prod")
 #'
 #' data(cars)
-#' with(cars, weighted_median_line(dist ~ speed))
-#' with(cars, weighted_median_line(dist ~ speed, type="prod"))
+#' with(cars, weighted_median_line(dist ~ speed, w=rep(1, length(dist))))
+#' with(cars, weighted_median_line(dist ~ speed, w=rep(1, length(dist)), type="prod"))
 #'
 #' # weighted
 #' w <- c(rep(1,20), rep(2,20), rep(5, 10))
@@ -1010,14 +1031,14 @@ weighted_line <- function(x, y=NULL, w, na.rm=FALSE, iter = 1){
 #'
 #' # outlier in y
 #' cars$dist[49] <- 360
-#' with(cars, weighted_median_line(dist ~ speed))
-#' with(cars, weighted_median_line(dist ~ speed, type="prod"))
+#' with(cars, weighted_median_line(dist ~ speed, w=w))
+#' with(cars, weighted_median_line(dist ~ speed, w=w, type="prod"))
 #'
 #' # outlier in x
 #' data(cars)
 #' cars$speed[49] <- 72
-#' with(cars, weighted_median_line(dist ~ speed))
-#' with(cars, weighted_median_line(dist ~ speed, type="prod"))
+#' with(cars, weighted_median_line(dist ~ speed, w=w))
+#' with(cars, weighted_median_line(dist ~ speed, w=w, type="prod"))
 #' @seealso \code{\link[stats]{line}}, \code{\link{weighted_line}},
 #' \code{\link{weighted_median_ratio}}
 #' @export weighted_median_line
@@ -1025,14 +1046,14 @@ weighted_line <- function(x, y=NULL, w, na.rm=FALSE, iter = 1){
 #' @importFrom grDevices xy.coords
 weighted_median_line <- function(x, y=NULL, w, type="slopes", na.rm=FALSE){
 
+  if(missing(w)) stop('Argument w (weights) is missing, with no default.')
+
   if (inherits(x, "formula")) {
     dat <- xy.coords(x)
     x <- dat$x
     y <- dat$y
   }
   if (NCOL(x) > 1) return("x contains more than 1 explanatory variables.")
-
-  if (missing(w)) w <- rep(1, length(x))
 
   # Robustification type
   stype <- pmatch(type, c("slopes"), nomatch=2)
@@ -1086,7 +1107,7 @@ weighted_median_line <- function(x, y=NULL, w, type="slopes", na.rm=FALSE){
 #' @examples
 #' x <- c(1,2,4,5)
 #' y <- c(1,0,5,2)
-#' weighted_median_ratio(y~x)
+#' weighted_median_ratio(y~x, w = rep(1, length(y)))
 #' @seealso \code{\link[stats]{line}}, \code{\link{weighted_line}},
 #' \code{\link{weighted_median_line}}
 #' @export weighted_median_ratio
@@ -1094,14 +1115,14 @@ weighted_median_line <- function(x, y=NULL, w, type="slopes", na.rm=FALSE){
 #' @importFrom grDevices xy.coords
 weighted_median_ratio <- function(x, y=NULL, w, na.rm=FALSE){
 
+  if(missing(w)) stop('Argument w (weights) is missing, with no default.')
+
   if (inherits(x, "formula")) {
     dat <- xy.coords(x)
     y <- dat$y
     x <- dat$x
   }
   if (NCOL(x) > 1) return("x contains more than 1 explanatory variables.")
-
-  if (missing(w)) w <- rep(1, length(x))
 
   # Ensure case-wise completeness
   ok <- complete.cases(data.frame(x, y, w))

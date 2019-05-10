@@ -39,13 +39,13 @@ The function allows weights and missing values.
 \examples{
 x <- c(1, 2, 4, 5)
 y <- c(3, 2, 7, 4)
-weighted_line(y~x)
-weighted_median_line(y~x)
-weighted_median_line(y~x, type="prod")
+weighted_line(y~x, w=rep(1, length(x)))
+weighted_median_line(y~x, w=rep(1, length(x)))
+weighted_median_line(y~x, w=rep(1, length(x)), type="prod")
 
 data(cars)
-with(cars, weighted_median_line(dist ~ speed))
-with(cars, weighted_median_line(dist ~ speed, type="prod"))
+with(cars, weighted_median_line(dist ~ speed, w=rep(1, length(dist))))
+with(cars, weighted_median_line(dist ~ speed, w=rep(1, length(dist)), type="prod"))
 
 # weighted
 w <- c(rep(1,20), rep(2,20), rep(5, 10))
@@ -54,14 +54,14 @@ with(cars, weighted_median_line(dist ~ speed, w=w, type="prod"))
 
 # outlier in y
 cars$dist[49] <- 360
-with(cars, weighted_median_line(dist ~ speed))
-with(cars, weighted_median_line(dist ~ speed, type="prod"))
+with(cars, weighted_median_line(dist ~ speed, w=w))
+with(cars, weighted_median_line(dist ~ speed, w=w, type="prod"))
 
 # outlier in x
 data(cars)
 cars$speed[49] <- 72
-with(cars, weighted_median_line(dist ~ speed))
-with(cars, weighted_median_line(dist ~ speed, type="prod"))
+with(cars, weighted_median_line(dist ~ speed, w=w))
+with(cars, weighted_median_line(dist ~ speed, w=w, type="prod"))
 }
 \seealso{
 \code{\link[stats]{line}}, \code{\link{weighted_line}},
