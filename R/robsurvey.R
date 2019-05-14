@@ -29,11 +29,14 @@ NULL
 
 #' Weighted median with weighted interpolation
 #'
-#' \code{weighted.median} computes a weighted median where the
+#' \code{weighted_median} computes a weighted median where the
 #' exact location corresponds exactly to a cumulative weight of 0.5.
 #' This yields a symmetric median.
 #'
-#' TBD
+#' Note that the \code{weighted_median} function delivers a symmetric
+#' median while the \code{weighted_quantile} function with probability
+#' 0.5 delivers the lower median. Hence, the results of these two
+#' functions will generally differ.
 #'
 #' @param x a numeric vector whose weighted sample median is wanted
 #' @param w a numeric vector of weights

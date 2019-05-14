@@ -18,12 +18,15 @@ stripped before the computation proceeds.}
 weighted sample median
 }
 \description{
-\code{weighted.median} computes a weighted median where the
+\code{weighted_median} computes a weighted median where the
 exact location corresponds exactly to a cumulative weight of 0.5.
 This yields a symmetric median.
 }
 \details{
-TBD
+Note that the \code{weighted_median} function delivers a symmetric
+median while the \code{weighted_quantile} function with probability
+0.5 delivers the lower median. Hence, the results of these two
+functions will generally differ.
 }
 \examples{
 x <- c(0.1, 0.35, 0.05, 0.1, 0.15, 0.05, 0.2)
