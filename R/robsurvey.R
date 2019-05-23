@@ -212,9 +212,9 @@ rht_control <- function(acc = 1e-5, maxit = 100, psi = "Huber", ...){
 #'
 #' @title Weighted total and mean (Horvitz-Thompson and Hajek estimators)
 #'
-#' @description TBD
+#' @description Weighted total and mean (Horvitz-Thompson and Hajek estimators)
 #'
-#' @details TBD
+#' @details -
 #'
 #' @note \code{wgtmeantotal} is a generic name for the functions documented.
 #'
@@ -314,8 +314,8 @@ weighted_mean <- function(x, w, na.rm = FALSE){
 #'    probabilities, type \code{"rht"} tends to be superior.
 #'    }
 #'    \item{\emph{Scale}}{
-#'    M-estimators of location are not scale invariant. The unkown scale is
-#'    estimated simultaneously with the estimate of location (mean or toal) as
+#'    M-estimators of location are not scale invariant. The unknown scale is
+#'    estimated simultaneously with the estimate of location (mean or total) as
 #'    the weighted median absolute deviation from the weighted median (MAD, see
 #'    \code{\link{weighted_mad}}).
 #'
