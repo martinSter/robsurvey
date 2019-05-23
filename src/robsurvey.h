@@ -15,9 +15,6 @@ void wmad(double*, double*, double*, int*);
 void wquantile(double*, double*, double*, double*, int*);
 void wmeantrimmed(double*, double*, double*, double*, double*, int*);
 void wmeanwinsorized(double*, double*, double*, double*, double*, int*);
-void med(double*, int*, double*);
-void wtselect(double*, double*, double*, int*, double*);
-void wmed(double*, double*, int*, double*);
 
 void sel0(double*, double*, int*, int*);
 

@@ -25,16 +25,6 @@ void wquantile(double*, double*, double*, double*, int*);
 void wmeantrimmed(double*, double*, double*, double*, double*, int*);
 void wmeanwinsorized(double*, double*, double*, double*, double*, int*);
 
-
-void part(double*, double, int, int*, int*);
-void wpart(double*, double*, double, int, int*, int*);
-void med(double*, int*, double*);
-double select(double*, int, int);
-double heap_select(double*, int, int);
-
-
-
-
 /* rwls: iteratively reweighted least squares
  *---------------------------------------------------------------------------
  * PARAMETERS
