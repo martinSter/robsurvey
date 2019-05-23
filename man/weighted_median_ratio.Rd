@@ -23,9 +23,6 @@ a vector with two components: intercept and slope
 A weighted median of the ratios y/x determines the slope of a
 regression through the origin.
 }
-\details{
-TBD
-}
 \examples{
 x <- c(1,2,4,5)
 y <- c(1,0,5,2)

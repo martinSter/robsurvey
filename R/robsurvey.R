@@ -1099,8 +1099,6 @@ weighted_median_line <- function(x, y=NULL, w, type="slopes", na.rm=FALSE){
 #' A weighted median of the ratios y/x determines the slope of a
 #' regression through the origin.
 #'
-#' TBD
-#'
 #' @param x a numeric vector (explanatory variable)
 #' @param y a numeric vector (response variable)
 #' @param w a numeric vector of (optional) weights
