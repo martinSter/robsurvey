@@ -1,20 +1,24 @@
 Package: robsurvey
 Type: Package
 Title: Robust Survey Estimation 
-Version: 0.0.0.9000
+Version: 0.1.0
 Authors@R: c(
     person("Beat", "Hulliger", email = "beat.hulliger@fhnw.ch", role = "aut"),
     person("Tobias", "Schoch", email = "tobias.schoch@gmail.com", role = c("aut", "cre")))
-Description: Methods to compute robust survey statistics when dealing with complex survey
-    samples. The package provides robust Horvitz-Thompson M-estimators of the mean and total,
-    as well as robust, trimmed or winsorized Horvitz-Thompson estimators of the mean and total.
+Description: The package robsurvey provides several functions to compute 
+    robust survey statistics. The package supports the computations of 
+    robust means, totals, and ratios. Available methods are Huber M-estimators, 
+    trimming, and winsorization. The package robsurvey complements the 
+    survey package. The package additionally includes a weighted version 
+    of the resistant line function of base R (line()), as well as two 
+    median based simple regression estimators.
 License: MIT + file LICENSE
 URL: https://github.com/martinSter/robsurvey
 BugReports: https://github.com/martinSter/robsurvey/issues
 Encoding: UTF-8
 LazyData: true
 Depends: 
-    R (>= 3.5.0)
+    R (>= 3.6.0)
 Imports:
     survey (>= 3.35-1),
     stats,

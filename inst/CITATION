@@ -4,13 +4,13 @@ citEntry(entry = "Manual",
   title        = "robsurvey: Robust survey estimation",
   author       = personList(as.person("Beat Hulliger"), as.person("Tobias Schoch")),
   year         = "2019",
-  note         = "R package version 0.0.0.9000",
+  note         = "R package version 0.0.1",
   url          = "https://github.com/martinSter/robsurvey",
 
   textVersion  =
   paste("Beat Hulliger and Tobias Schoch (2019).",
         "robsurvey: Robust survey estimation.",
-        "R package version 0.0.0.9000",
+        "R package version 0.0.1",
         "URL https://github.com/martinSter/robsurvey")
 )
 
