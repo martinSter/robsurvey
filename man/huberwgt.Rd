@@ -85,8 +85,8 @@ Weighted Huber M-estimators of the mean and total are available in two forms:
    probabilities, type \code{"rht"} tends to be superior.
    }
    \item{\emph{Scale}}{
-   M-estimators of location are not scale invariant. The unkown scale is
-   estimated simultaneously with the estimate of location (mean or toal) as
+   M-estimators of location are not scale invariant. The unknown scale is
+   estimated simultaneously with the estimate of location (mean or total) as
    the weighted median absolute deviation from the weighted median (MAD, see
    \code{\link{weighted_mad}}).
 

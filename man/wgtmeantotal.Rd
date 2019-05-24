@@ -22,10 +22,10 @@ should be stripped before the computation proceeds.}
 Estimate (scalar)
 }
 \description{
-TBD
+Weighted total and mean (Horvitz-Thompson and Hajek estimators)
 }
 \details{
-TBD
+-
 }
 \note{
 \code{wgtmeantotal} is a generic name for the functions documented.
