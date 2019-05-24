@@ -1,5 +1,9 @@
 ## Resubmission
-This is our first submission to CRAN.
+This is a resubmission. In this version I have:
+
+* Used single quotes for software names in the DESCRIPTION file.
+* Added a reference about the method to the Description field.
+* Fixed the invalid URLs in the vignette and the README file.
 
 ## Test environments
 * Windows 10 (local), R 3.6.0
