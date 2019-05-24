@@ -112,9 +112,9 @@ All methods may be used with `na.rm = TRUE` in order to remove missing values be
 
 Most of the methods provided in the package are described in [@Hulliger1995, @Hulliger1999, @Hulliger2011, @AMELI-D10-3].
 
-**robsurvey** complements the popular [survey](https://cran.r-project.org/web/packages/survey/index.html) package.
+**robsurvey** complements the popular [survey](https://cran.r-project.org/package=survey) package.
 
-Multivariate outlier detection and imputation methods can be found in the R-package [modi](https://cran.r-project.org/web/packages/modi/index.html). 
+Multivariate outlier detection and imputation methods can be found in the R-package [modi](https://cran.r-project.org/package=modi). 
 
 ## Overview
 

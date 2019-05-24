@@ -14,7 +14,7 @@ knitr::opts_chunk$set(
 
 # robsurvey
 
-The package **robsurvey** provides several functions to compute robust survey statistics. The package supports the computations of robust means, totals, and ratios. Available methods are Huber M-estimators, trimming, and winsorization. **robsurvey** complements the famous [survey package](https://cran.r-project.org/web/packages/survey/index.html).
+The package **robsurvey** provides several functions to compute robust survey statistics. The package supports the computations of robust means, totals, and ratios. Available methods are Huber M-estimators, trimming, and winsorization. **robsurvey** complements the famous [survey package](https://cran.r-project.org/package=survey).
 
 ## Overview
 
