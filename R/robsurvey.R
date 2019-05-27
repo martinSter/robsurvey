@@ -53,7 +53,7 @@ weighted_median <- function(x, w, na.rm=FALSE) {
   if(missing(w)) stop('Argument w (weights) is missing, with no default.')
   sel <- is.finite(x) & is.finite(w)
   if (sum(sel) < length(x) & na.rm==FALSE) {
-    return("There are missing values in x or w. \n")
+    stop("There are missing values in x or w. \n")
   }
   x <- x[sel]
   w <- w[sel]
@@ -67,7 +67,7 @@ weighted_median <- function(x, w, na.rm=FALSE) {
 
   # warning if one of the weights accounts for half of total weight
   if(max(w)/sum(w) > 0.5) {
-    cat("\n Dominance of one observation!\n")
+    message("\n Dominance of one observation!\n")
   }
 
   lower.k <- max(which(cumw <= 0.5))
@@ -419,7 +419,7 @@ weighted_mean_huber <- function(x, w, k = 1.5, type = "rht", info = FALSE,
       beta = as.double(numeric(1)), scale = as.double(numeric(1)),
       maxit = as.integer(ctrl$maxit), tol = as.double(ctrl$acc),
       psi = as.integer(ctrl$psi))
-   if(tmp$maxit == 0) cat("IRWLS algorithm did not converge!\n")
+   if(tmp$maxit == 0) message("IRWLS algorithm did not converge!\n")
    if(info){
       res <- list(characteristic = "mean",
 	 estimator = paste0("M-estimator (", type, ", ", ifelse(ctrl$psi == 0,
@@ -490,7 +490,7 @@ svymean_huber <- function(x, design, k = 1.5, type = "rht", ...){
       k = as.double(k), beta = as.double(numeric(1)),
       scale = as.double(numeric(1)), maxit = as.integer(ctrl$maxit),
       tol = as.double(ctrl$acc), psi = as.integer(ctrl$psi))
-   if(tmp$maxit == 0) cat("IRWLS algorithm did not converge!\n")
+   if(tmp$maxit == 0) message("IRWLS algorithm did not converge!\n")
    names(tmp$beta) <- yname
    # compute variance (using influence function values)
    design$variables$zz <- tmp$infl
@@ -947,13 +947,13 @@ weighted_line <- function(x, y=NULL, w, na.rm=FALSE, iter = 1){
     y <- mf[, 1]
     x <- mf[, -1]
   }
-  if (NCOL(x) > 1) return("x contains more than 1 explanatory variables.")
+  if (NCOL(x) > 1) stop("x contains more than 1 explanatory variables.")
   dat <- data.frame(x, y, w)
   ok <- complete.cases(dat$x, dat$y, dat$w)
   n <- sum(ok)
   if (n < length(x)) {
     if (na.rm) {x <- dat$x[ok]; y <- dat$y[ok]; w <- dat$w[ok]} else
-      return("There are missing values in x, y or w.\n")
+      stop("There are missing values in x, y or w.\n")
   }
 
   # Sort data according to x
@@ -1056,7 +1056,7 @@ weighted_median_line <- function(x, y=NULL, w, type="slopes", na.rm=FALSE){
     x <- dat$x
     y <- dat$y
   }
-  if (NCOL(x) > 1) return("x contains more than 1 explanatory variables.")
+  if (NCOL(x) > 1) stop("x contains more than 1 explanatory variables.")
 
   # Robustification type
   stype <- pmatch(type, c("slopes"), nomatch=2)
@@ -1066,7 +1066,7 @@ weighted_median_line <- function(x, y=NULL, w, type="slopes", na.rm=FALSE){
   n <- sum(ok)
   if (n < length(x)) {
     if (na.rm) {x <- x[ok]; y <- y[ok]; w <- w[ok]} else
-      return("There are missing values in x, y or w.\n")
+      stop("There are missing values in x, y or w.")
   }
 
   # univariate medians
@@ -1123,14 +1123,14 @@ weighted_median_ratio <- function(x, y=NULL, w, na.rm=FALSE){
     y <- dat$y
     x <- dat$x
   }
-  if (NCOL(x) > 1) return("x contains more than 1 explanatory variables.")
+  if (NCOL(x) > 1) stop("x contains more than 1 explanatory variables.")
 
   # Ensure case-wise completeness
   ok <- complete.cases(data.frame(x, y, w))
   n <- sum(ok)
   if (n < length(x)) {
     if (na.rm) {x <- x[ok]; y <- y[ok]; w <- w[ok]} else
-      return("There are missing values in x, y or w.\n")
+      stop("There are missing values in x, y or w.")
   }
 
   # ratio
