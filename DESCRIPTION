@@ -1,7 +1,7 @@
 Package: robsurvey
 Type: Package
 Title: Robust Survey Statistics Estimation 
-Version: 0.1.0
+Version: 0.1.0.9000
 Authors@R: c(
     person("Beat", "Hulliger", email = "beat.hulliger@fhnw.ch", role = "aut"),
     person("Tobias", "Schoch", email = "tobias.schoch@gmail.com", role = "aut"),
@@ -20,12 +20,11 @@ BugReports: https://github.com/martinSter/robsurvey/issues
 Encoding: UTF-8
 LazyData: true
 Depends: 
-    R (>= 3.6.0)
+    R (>= 3.5.0)
 Imports:
-    survey (>= 3.35-1),
+    grDevices,
     stats,
-    graphics,
-    utils
+    survey (>= 3.35-1)
 RoxygenNote: 6.1.1
 Suggests:
     knitr,
