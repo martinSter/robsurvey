@@ -1,14 +1,8 @@
-## Resubmission
-This is the second resubmission. In the first resubmission I have:
+## Release summary
+This is a patch release that fixes:
 
-* Used single quotes for software names in the DESCRIPTION file.
-* Added a reference about the method to the Description field.
-* Fixed the invalid URLs in the vignette and the README file.
-
-In the second resubmission I have:
-
-* Used message() instead of cat() to print information to console.
-* Replace return() with the more appropriate stop() in some cases.
+* Dependence on R version 3.5.0 instead of 3.6.0
+* 'graphics' and 'utils' removed from Imports field
 
 ## Test environments
 * Windows 10 (local), R 3.6.0
