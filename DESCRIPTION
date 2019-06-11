@@ -1,7 +1,7 @@
 Package: robsurvey
 Type: Package
 Title: Robust Survey Statistics Estimation 
-Version: 0.1.0.9000
+Version: 0.1.1
 Authors@R: c(
     person("Beat", "Hulliger", email = "beat.hulliger@fhnw.ch", role = "aut"),
     person("Tobias", "Schoch", email = "tobias.schoch@gmail.com", role = "aut"),
