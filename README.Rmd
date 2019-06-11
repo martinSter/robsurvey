@@ -40,7 +40,10 @@ The following functions are provided in **robsurvey**:
 You can install robsurvey from github with:
 
 ```{r gh-installation, eval = FALSE}
-# install.packages("devtools")
+# install the latest version from CRAN
+install.packages("robsurvey")
+
+# or, you can install the latest development version from GitHub
 devtools::install_github("martinSter/robsurvey")
 ```
 

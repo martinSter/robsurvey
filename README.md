@@ -31,7 +31,10 @@ Installation
 You can install robsurvey from github with:
 
 ``` r
-# install.packages("devtools")
+# install the latest version from CRAN
+install.packages("robsurvey")
+
+# or, you can install the latest development version from GitHub
 devtools::install_github("martinSter/robsurvey")
 ```
 
