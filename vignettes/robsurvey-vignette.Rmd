@@ -261,4 +261,8 @@ The weighted median calculates a median from the weighted empirical cumulative d
 weighted_median(apistrat$api00, weights(dstrat))
 ```
 
+## Acknowledgement
+
+The implementation of the package **robsurvey** was supported by the Hasler Foundation. 
+
 ## References
