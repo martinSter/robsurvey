@@ -91,3 +91,6 @@ For simulations and as intermediate results the above functions can also be used
 weighted_mean_huber(apistrat$api00, weights(dstrat), k = 2)
 ```
 
+## Acknowledgement
+
+The implementation of this R package was supported by the Hasler foundation.
