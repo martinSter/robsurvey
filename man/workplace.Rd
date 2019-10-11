@@ -5,7 +5,7 @@
 \description{
 The \code{workplace} data.frame is a compilation Fuller (2009) 
 }
-\usage{data(landsat)}
+\usage{data(workplace)}
 \format{
    A data frame with observations on 142 workplaces, with the following variables
    \describe{
